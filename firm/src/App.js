@@ -6,6 +6,8 @@ import ZarzadzanieProduktami from './components/ZarzadzanieProduktami';
 import Transakcje from './components/Transakcje';
 import NavBar from './components/NavBar'
 import Sidebar from './components/Sidebar';
+import Wydatki from './components/Wydatki';
+import Raporty from './components/Raporty';
 
 const App = () => {
   return (
@@ -21,6 +23,8 @@ const App = () => {
               <Route path="/transakcje" element={<Transakcje />} />
               <Route path="/panel" element={<PanelAdministratora />} />
               <Route path="/produkty" element={<ZarzadzanieProduktami />} />
+              <Route path="/wydatki" element={<Wydatki />} />
+              <Route path="/raporty" element={<Raporty />} />
             </Routes>
           </div>
         </div>
