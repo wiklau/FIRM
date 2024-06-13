@@ -15,7 +15,7 @@ const App = () => {
       <div className="">
           <NavBar />
           <div className="flex w-screen">
-            <div className="w-17/100">
+            <div className="w-17/100 bg-gray-200">
               <Sidebar />
             </div>
           <div className="w-3/4">

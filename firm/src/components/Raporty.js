@@ -35,12 +35,13 @@ const Raporty = () => {
 
   const handleDeleteReport = async (reportId) => {
     try {
-      await axios.delete(`https://localhost:7039/api/Report/${reportId}`);
-      fetchReports();
+      await axios.delete(`https://localhost:7039/api/Report?${reportId}`);
+      setReports(reports.filter(report => report.id !== reportId)); // Update state after deletion
     } catch (error) {
       console.error('Błąd podczas usuwania raportu:', error);
     }
   };
+  
 
   const formatDate = (dateString) => {
     const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' };

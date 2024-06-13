@@ -9,6 +9,7 @@ const Transakcje = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editTransaction, setEditTransaction] = useState(null);
+  const [error, setError] = useState(null);
   const [newTransaction, setNewTransaction] = useState({
     id: 2,
     date: "",
@@ -17,8 +18,9 @@ const Transakcje = () => {
       {
         id: 0,
         transactionId: 2,
-        productID: "",
-        quantity:""
+        productID: 0,
+        productName: "",
+        quantity: ""
       }
     ],
     paymentType: "",
@@ -32,7 +34,7 @@ const Transakcje = () => {
       const response = await axios.get('https://localhost:7039/api/Transaction');
       setTransactions(response.data);
     } catch (error) {
-      console.error('Błąd podczas pobierania transakcji:', error);
+      console.error('Błąd podczas dodawania transakcji:', error);
     }
   };
 
@@ -53,9 +55,10 @@ const Transakcje = () => {
         employeeId: "",
         transactionProducts: [
           {
-            id: 0,
-            transactionId: 2,
-            productID: "",
+            id: 2,
+            transactionId: 0,
+            productID: 0,
+            productName: "",
             quantity: ""
           }
         ],
@@ -66,6 +69,11 @@ const Transakcje = () => {
       });
     } catch (error) {
       console.error('Błąd podczas dodawania transakcji:', error);
+      if (error.response && error.response.data) {
+        setError(error.response.data);
+      } else {
+        setError('Wystąpił nieoczekiwany błąd. Spróbuj ponownie później.');
+      }
     }
   };
 
@@ -82,9 +90,10 @@ const Transakcje = () => {
       transactionProducts: [
         ...newTransaction.transactionProducts,
         {
-          id: 0,
-          transactionId: 2,
-          productID: "",
+          id: 2,
+          transactionId: 0,
+          productID: 0,
+          productName: "",
           quantity: ""
         }
       ]
@@ -108,19 +117,32 @@ const Transakcje = () => {
       console.error('Błąd podczas usuwania transakcji:', error);
     }
   };
-  const handleEditTransaction = (transaction) => {
-    setEditTransaction(transaction);
-    setIsEditModalOpen(true);
-  };
-  const handleSaveEditedTransaction = async () => {
+  const handleEditTransaction = async (transaction) => {
     try {
+      // Jeśli transakcja nie jest ustawiona, oznacza to, że chcemy ją tylko edytować
+      if (!editTransaction) {
+        setEditTransaction(transaction);
+        setIsEditModalOpen(true);
+        return; // Przerwij dalsze wykonanie funkcji
+      }
+  
+      // Jeśli transakcja jest ustawiona, zapisujemy ją na serwerze
       await axios.put(`https://localhost:7039/api/Transaction/${editTransaction.id}`, editTransaction);
-      fetchTransactions();
-      setIsEditModalOpen(false);
+      fetchTransactions(); // Pobranie najnowszych danych po udanej aktualizacji
+      setIsEditModalOpen(false); // Zamknięcie modala po udanej aktualizacji
+      setEditTransaction(null); // Wyczyszczenie transakcji po zakończeniu edycji
+      setError(null); // Wyczyszczenie ewentualnego błędu
+  
     } catch (error) {
       console.error('Błąd podczas edycji transakcji:', error);
+      if (error.response && error.response.data) {
+        setError(error.response.data); // Ustawienie błędu na odpowiedź z serwera
+      } else {
+        setError('Wystąpił nieoczekiwany błąd. Spróbuj ponownie później.');
+      }
     }
   };
+  
   
 
   return (
@@ -133,6 +155,17 @@ const Transakcje = () => {
           <img src={plusIcon} alt="" className="w-8 h-8 mr-2" />Dodaj
         </button>
       </div>
+      {error && (
+        <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center">
+        <div className="bg-white p-8 rounded-lg">
+        <h2 className="text-2xl font-bold mb-4">Błąd</h2>
+        <p>{error}</p>
+        <button onClick={() => window.location.reload()} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+        Zamknij
+        </button>
+        </div>
+        </div>
+      )}
       {isEditModalOpen && editTransaction && (
   <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center">
     <div className="bg-white p-8 rounded-lg">
@@ -156,15 +189,15 @@ const Transakcje = () => {
       {editTransaction.transactionProducts.map((product, index) => (
         <div key={index}>
           <input
-            type="number"
-            name={`productID-${index}`}
-            value={product.productID}
+            type="text"
+            name={`productName-${index}`}
+            value={product.productName}
             onChange={(e) => {
               const newTransactionProducts = [...editTransaction.transactionProducts];
-              newTransactionProducts[index].productID = e.target.value;
+              newTransactionProducts[index].productName = e.target.value;
               setEditTransaction({ ...editTransaction, transactionProducts: newTransactionProducts });
             }}
-            placeholder="ID Produktu"
+            placeholder="Nazwa Produktu"
             className="block w-full mb-4 px-4 py-2 border border-gray-300 rounded-lg"/>
           <input
             type="number"
@@ -206,7 +239,7 @@ const Transakcje = () => {
       />
       <button
         onClick={() => {
-          handleSaveEditedTransaction();
+          handleEditTransaction();
           setIsEditModalOpen(false);
         }}
         className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
@@ -222,7 +255,6 @@ const Transakcje = () => {
         </div>
       </div>
     )}
-
 
       {isModalOpen && (
         <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center">
@@ -247,15 +279,15 @@ const Transakcje = () => {
             {newTransaction.transactionProducts.map((product, index) => (
               <div key={index}>
                 <input
-                  type="number"
-                  name={`productID-${index}`}
-                  value={product.productID}
+                  type="text"
+                  name={`productName-${index}`}
+                  value={product.productName}
                   onChange={(e) => {
                     const newTransactionProducts = [...newTransaction.transactionProducts];
-                    newTransactionProducts[index].productID = e.target.value;
+                    newTransactionProducts[index].productName = e.target.value;
                     setNewTransaction({ ...newTransaction, transactionProducts: newTransactionProducts });
                   }}
-                  placeholder="ID Produktu"
+                  placeholder="Nazwa Produktu"
                   className="block w-full mb-4 px-4 py-2 border border-gray-300 rounded-lg"
                 />
                 <input
@@ -321,7 +353,7 @@ const Transakcje = () => {
           </div>
         )}
         <div className="w-8/10 mx-auto mt-2">
-          <div className="h-140 overflow-y-auto">
+          <div className="h-screen overflow-y-auto">
             <table className="w-full border-collapse border border-gray-300">
               <thead className="bg-gray-200">
                 <tr>
@@ -374,7 +406,7 @@ const Transakcje = () => {
     );
   }
   
-  export default Transakcje
+export default Transakcje
   
   
   

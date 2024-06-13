@@ -183,7 +183,7 @@ const ZarzadzanieProduktami = () => {
               name="type"
               value={newProduct.type}
               onChange={handleInputChange}
-              placeholder="Typ"
+              placeholder="Kategoria"
               className="block w-full mb-4 px-4 py-2 border border-gray-300 rounded-lg"
             />
             <input
@@ -210,9 +210,9 @@ const ZarzadzanieProduktami = () => {
         </div>
       )}
       <div className="w-8/10 mx-auto mt-2">
-        <div className="h-140 overflow-y-auto">
-          <table className="w-full border-collapse border border-gray-300">
-            <thead className="bg-gray-200 top-0 z-10">
+        <div className="h-screen overflow-y-auto margin-0">
+          <table className="w-full border-collapse border border-gray-500">
+            <thead className="bg-gray-200 top-0 z-10 sticky">
               <tr>
                 <th className="border border-gray-300 p-2">ID</th>
                 <th className="border border-gray-300 p-2">Produkt</th>
