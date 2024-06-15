@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import Select from 'react-select';
 import editIcon from "../icons/edit.png";
 import koszIcon from "../icons/kosz.png";
 import plusIcon from "../icons/plus.png";
+import ConfirmationModal from './ConfirmationModal';
 
 const Transakcje = () => {
   const [transactions, setTransactions] = useState([]);
@@ -10,6 +12,8 @@ const Transakcje = () => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editTransaction, setEditTransaction] = useState(null);
   const [error, setError] = useState(null);
+  const [products, setProducts] = useState([]);
+  const [deleteTransactionId, setDeleteTransactionId] = useState(null);
   const [newTransaction, setNewTransaction] = useState({
     id: 2,
     date: "",
@@ -37,9 +41,19 @@ const Transakcje = () => {
       console.error('Błąd podczas dodawania transakcji:', error);
     }
   };
+  const fetchProducts = async () => {
+    try {
+      const response = await axios.get('https://localhost:7039/api/Products');
+      setProducts(response.data.map(product => ({ value: product.id, label: product.name })));
+    } catch (error) {
+      console.error('Błąd podczas pobierania produktów:', error);
+    }
+  };
 
   useEffect(() => {
     fetchTransactions();
+    fetchProducts();
+    console.log();
   }, []);
 
   const handleAddTransaction = async () => {
@@ -113,36 +127,58 @@ const Transakcje = () => {
     try {
       await axios.delete(`https://localhost:7039/api/Transaction/${transactionId}`);
       fetchTransactions();
+      setDeleteTransactionId(null);
     } catch (error) {
       console.error('Błąd podczas usuwania transakcji:', error);
     }
   };
   const handleEditTransaction = async (transaction) => {
     try {
-      // Jeśli transakcja nie jest ustawiona, oznacza to, że chcemy ją tylko edytować
       if (!editTransaction) {
         setEditTransaction(transaction);
         setIsEditModalOpen(true);
-        return; // Przerwij dalsze wykonanie funkcji
+        return;
       }
-  
-      // Jeśli transakcja jest ustawiona, zapisujemy ją na serwerze
       await axios.put(`https://localhost:7039/api/Transaction/${editTransaction.id}`, editTransaction);
-      fetchTransactions(); // Pobranie najnowszych danych po udanej aktualizacji
-      setIsEditModalOpen(false); // Zamknięcie modala po udanej aktualizacji
-      setEditTransaction(null); // Wyczyszczenie transakcji po zakończeniu edycji
-      setError(null); // Wyczyszczenie ewentualnego błędu
+      fetchTransactions();
+      setIsEditModalOpen(false); 
+      setEditTransaction(null);
+      setError(null);
   
     } catch (error) {
       console.error('Błąd podczas edycji transakcji:', error);
       if (error.response && error.response.data) {
-        setError(error.response.data); // Ustawienie błędu na odpowiedź z serwera
+        setError(error.response.data);
       } else {
         setError('Wystąpił nieoczekiwany błąd. Spróbuj ponownie później.');
       }
     }
   };
+  const handleProductChange = (index, selectedOption) => {
+    const updatedTransactionProducts = [...newTransaction.transactionProducts];
+    updatedTransactionProducts[index].productID = selectedOption.value;
+    updatedTransactionProducts[index].productName = selectedOption.label;
+    setNewTransaction({
+      ...newTransaction,
+      transactionProducts: updatedTransactionProducts
+    });
+  };
+  const handleEditProductChange = (index, selectedOption) => {
+    const updatedTransactionProducts = [...editTransaction.transactionProducts];
+    updatedTransactionProducts[index].productID = selectedOption.value;
+    updatedTransactionProducts[index].productName = selectedOption.label;
+    setEditTransaction({
+      ...editTransaction,
+      transactionProducts: updatedTransactionProducts
+    });
+  };
+  const openDeleteConfirmation = (transactionId) => {
+    setDeleteTransactionId(transactionId);
+  };
   
+  const closeDeleteConfirmation = () => {
+    setDeleteTransactionId(null);
+  };  
   
 
   return (
@@ -167,7 +203,7 @@ const Transakcje = () => {
         </div>
       )}
       {isEditModalOpen && editTransaction && (
-  <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center">
+      <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center">
     <div className="bg-white p-8 rounded-lg">
       <h2 className="text-2xl font-bold mb-4">Edytuj transakcję</h2>
       <input
@@ -188,17 +224,13 @@ const Transakcje = () => {
       />
       {editTransaction.transactionProducts.map((product, index) => (
         <div key={index}>
-          <input
-            type="text"
-            name={`productName-${index}`}
-            value={product.productName}
-            onChange={(e) => {
-              const newTransactionProducts = [...editTransaction.transactionProducts];
-              newTransactionProducts[index].productName = e.target.value;
-              setEditTransaction({ ...editTransaction, transactionProducts: newTransactionProducts });
-            }}
-            placeholder="Nazwa Produktu"
-            className="block w-full mb-4 px-4 py-2 border border-gray-300 rounded-lg"/>
+          <Select
+          name={`productName-${index}`}
+          value={products.find(option => option.value === product.productName)}
+          onChange={(selectedOption) => handleEditProductChange(index, selectedOption)}
+          options={products}
+          className="block w-full mb-4"
+          />
           <input
             type="number"
             name={`quantity-${index}`}
@@ -247,7 +279,7 @@ const Transakcje = () => {
         Zapisz zmiany
       </button>
       <button
-        onClick={() => setIsEditModalOpen(false)}
+        onClick={() => window.location.reload()}
         className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
       >
         Anuluj
@@ -278,18 +310,13 @@ const Transakcje = () => {
             />
             {newTransaction.transactionProducts.map((product, index) => (
               <div key={index}>
-                <input
-                  type="text"
+                  <Select
                   name={`productName-${index}`}
-                  value={product.productName}
-                  onChange={(e) => {
-                    const newTransactionProducts = [...newTransaction.transactionProducts];
-                    newTransactionProducts[index].productName = e.target.value;
-                    setNewTransaction({ ...newTransaction, transactionProducts: newTransactionProducts });
-                  }}
-                  placeholder="Nazwa Produktu"
-                  className="block w-full mb-4 px-4 py-2 border border-gray-300 rounded-lg"
-                />
+                  value={products.find(option => option.value === product.productName)}
+                  onChange={(selectedOption) => handleProductChange(index, selectedOption)}
+                  options={products}
+                  className="block w-full mb-4"
+                  />
                 <input
                   type="number"
                   name={`quantity-${index}`}
@@ -390,7 +417,7 @@ const Transakcje = () => {
                         className="mr-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded flex">
                         <img src={editIcon} alt="" className="w-8 h-8 mr-2" />Edytuj
                         </button></td>
-                    <td className="border border-gray-300 p-2"><button onClick={() => handleDeleteTransaction(transaction.id)}
+                    <td className="border border-gray-300 p-2"><button onClick={() => openDeleteConfirmation(transaction.id)}
                       className="mr-2 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded flex">
                       <img src={koszIcon} alt="" className="w-8 h-8 mr-2" />Usuń
                       </button></td>
@@ -402,6 +429,12 @@ const Transakcje = () => {
           <div className="flex justify-start mt-4">
           </div>
         </div>
+        {deleteTransactionId && (
+        <ConfirmationModal
+        message="Czy na pewno chcesz usunąć tę transakcję?"
+        onCancel={closeDeleteConfirmation}
+        onConfirm={() => handleDeleteTransaction(deleteTransactionId)}
+        />)}
       </div>
     );
   }

@@ -3,11 +3,13 @@ import axios from 'axios';
 import editIcon from "../icons/edit.png";
 import koszIcon from "../icons/kosz.png";
 import plusIcon from "../icons/plus.png";
+import ConfirmationModal from './ConfirmationModal';
 
 const ZarzadzanieProduktami = () => {
   const [products, setProducts] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [deleteProductId, setDeleteProductId] = useState(null);
   const [newProduct, setNewProduct] = useState({
     name: "",
     description: "",
@@ -72,14 +74,23 @@ const ZarzadzanieProduktami = () => {
     }
   };
 
-  const handleDeleteProduct = async (productId) => {
+  const handleDeleteProduct = async () => {
     try {
-      await axios.delete(`https://localhost:7039/api/Products/${productId}`);
+      await axios.delete(`https://localhost:7039/api/Products/${deleteProductId}`);
       fetchProducts();
+      setDeleteProductId(null);
     } catch (error) {
       console.error('Błąd podczas usuwania produktu:', error);
     }
   };
+
+const openDeleteConfirmation = (productId) => {
+  setDeleteProductId(productId);
+};
+
+const closeDeleteConfirmation = () => {
+  setDeleteProductId(null);
+};
 
   return (
     <div className='p-10 ml-11'>
@@ -238,7 +249,7 @@ const ZarzadzanieProduktami = () => {
                         <img src={editIcon} alt="" className="w-8 h-8 mr-2" />Edytuj
                         </button></td>
                   <td className="border border-gray-300 p-2">
-                    <button onClick={() => handleDeleteProduct(product.id)}
+                    <button onClick={() => openDeleteConfirmation(product.id)}
                       className="mr-2 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded flex">
                       <img src={koszIcon} alt="" className="w-8 h-8 mr-2" />Usuń
                       </button></td>
@@ -248,6 +259,13 @@ const ZarzadzanieProduktami = () => {
           </table>
         </div>
       </div>
+      {deleteProductId && (
+        <ConfirmationModal
+          message="Czy na pewno chcesz usunąć ten produkt?"
+          onCancel={closeDeleteConfirmation}
+          onConfirm={handleDeleteProduct}
+        />
+      )}
     </div>
   );
 };
