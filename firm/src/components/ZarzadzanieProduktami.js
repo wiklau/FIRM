@@ -59,8 +59,13 @@ const ZarzadzanieProduktami = () => {
         type: "",
         description: ""
       });
-    } catch (error) {
-      console.error('Błąd podczas dodawania produktu:', error);
+    }  catch (error) {
+      console.error('Błąd podczas dodawania:', error);
+      if (error.response && error.response.data) {
+        setError(error.response.data);
+      } else {
+        setError('Wystąpił nieoczekiwany błąd. Spróbuj ponownie później.');
+      }
     }
   };
 
@@ -78,8 +83,13 @@ const ZarzadzanieProduktami = () => {
       await axios.put(`https://localhost:7039/api/Products/${editProduct.id}`, editProduct);
       fetchProducts();
       setIsEditModalOpen(false);
-    } catch (error) {
-      console.error('Błąd podczas edycji produktu:', error);
+    }  catch (error) {
+      console.error('Błąd podczas edycji:', error);
+      if (error.response && error.response.data) {
+        setError(error.response.data);
+      } else {
+        setError('Wystąpił nieoczekiwany błąd. Spróbuj ponownie później.');
+      }
     }
   };
 
@@ -90,6 +100,11 @@ const ZarzadzanieProduktami = () => {
       setDeleteProductId(null);
     } catch (error) {
       console.error('Błąd podczas usuwania produktu:', error);
+      if (error.response && error.response.data) {
+        setError(error.response.data);
+      } else {
+        setError('Wystąpił nieoczekiwany błąd. Spróbuj ponownie później.');
+      }
     }
   };
 
@@ -292,7 +307,7 @@ const formatPrice = (price) => {
         <ConfirmationModal
           message="Czy na pewno chcesz usunąć ten produkt?"
           onCancel={closeDeleteConfirmation}
-          onConfirm={handleDeleteProduct}
+          onConfirm={ () => {handleDeleteProduct(); setDeleteProductId(false);}}
         />
       )}
     </div>

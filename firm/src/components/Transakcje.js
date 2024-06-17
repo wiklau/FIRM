@@ -136,6 +136,11 @@ const Transakcje = () => {
       setDeleteTransactionId(null);
     } catch (error) {
       console.error('Błąd podczas usuwania transakcji:', error);
+      if (error.response && error.response.data) {
+        setError(error.response.data);
+      } else {
+        setError('Wystąpił nieoczekiwany błąd. Spróbuj ponownie później.');
+      }
     }
   };
   const handleEditTransaction = async (transaction) => {
@@ -145,11 +150,9 @@ const Transakcje = () => {
         setIsEditModalOpen(true);
         return;
       }
-      if (!editTransaction.date || !editTransaction.employeeId || editTransaction.transactionProducts.some(product => !product.productName || !product.quantity) || !editTransaction.paymentType
-            || !editTransaction.description || !editTransaction.discount ) {
+      if (!editTransaction.date || !editTransaction.employeeId || editTransaction.transactionProducts.some(product => !product.productName || !product.quantity) || !editTransaction.paymentType){
         setError('Proszę uzupełnić wszystkie pola.');
-        return;
-      }
+        return;}
       await axios.put(`https://localhost:7039/api/Transaction/${editTransaction.id}`, editTransaction);
       fetchTransactions();
       setIsEditModalOpen(false); 
@@ -215,7 +218,7 @@ const Transakcje = () => {
       )}
       {isEditModalOpen && editTransaction && (
       <div className="absolute top-0 left-0 w-full h-screen bg-black bg-opacity-50 flex items-center justify-center">
-    <div className="bg-white p-8 rounded-lg">
+      <div className="bg-white p-8 rounded-lg">
       <h2 className="text-2xl font-bold mb-4">Edytuj transakcję</h2>
       <input
         type="datetime-local"
@@ -452,7 +455,7 @@ const Transakcje = () => {
         <ConfirmationModal
         message="Czy na pewno chcesz usunąć tę transakcję?"
         onCancel={closeDeleteConfirmation}
-        onConfirm={() => handleDeleteTransaction(deleteTransactionId)}
+        onConfirm={() => {handleDeleteTransaction(deleteTransactionId); setDeleteTransactionId(false);}}
         />)}
       </div>
     );

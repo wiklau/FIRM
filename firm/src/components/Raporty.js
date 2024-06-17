@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import koszIcon from "../icons/kosz.png";
+import ConfirmationModal from './ConfirmationModal';
 
 const Raporty = () => {
   const [fromDate, setFromDate] = useState('');
   const [toDate, setToDate] = useState('');
   const [error, setError] = useState(null);
   const [reports, setReports] = useState([]);
+  const [deleteReportId, setDeleteReportId] = useState(null);
 
   const fetchReports = async () => {
     try {
@@ -15,6 +17,13 @@ const Raporty = () => {
     } catch (error) {
       console.error('Błąd podczas pobierania raportów:', error);
     }
+  };
+  const openDeleteConfirmation = (transactionId) => {
+    setDeleteReportId(transactionId);
+  };
+  
+  const closeDeleteConfirmation = () => {
+    setDeleteReportId(null);
   };
 
   useEffect(() => {
@@ -41,8 +50,9 @@ const Raporty = () => {
 
   const handleDeleteReport = async (reportId) => {
     try {
-      await axios.delete(`https://localhost:7039/api/Report?${reportId}`);
-      setReports(reports.filter(report => report.id !== reportId)); // Update state after deletion
+      await axios.delete(`https://localhost:7039/api/Report/${reportId}`);
+      fetchReports();
+      setDeleteReportId(null);
     } catch (error) {
       console.error('Błąd podczas usuwania raportu:', error);
     }
@@ -93,7 +103,7 @@ const Raporty = () => {
                 <td className="border border-gray-300 p-2">{report.totalExpenses}</td>
                 <td className="border border-gray-300 p-2">{report.totalBalance}</td>
                 <td className="border border-gray-300 p-2">
-                  <button onClick={() => handleDeleteReport(report.id)} className="mr-2 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded flex">
+                  <button onClick={() => openDeleteConfirmation(report.id)} className="mr-2 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded flex">
                     <img src={koszIcon} alt="" className="w-8 h-8 mr-2" />Usuń</button>
                 </td>
               </tr>
@@ -112,6 +122,12 @@ const Raporty = () => {
         </div>
         </div>
       )}
+      {deleteReportId && (
+        <ConfirmationModal
+        message="Czy na pewno chcesz usunąć ten raport?"
+        onCancel={closeDeleteConfirmation}
+        onConfirm={() => handleDeleteReport(deleteReportId)}
+        />)}
     </div>
   );
 };

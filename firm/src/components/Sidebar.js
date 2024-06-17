@@ -19,7 +19,7 @@ const Sidebar = () => {
             <Link to="/produkty" className="text-black px-10 py-2 block font-customFont text-center w-max">
                 <li className='flex items-center'>
                 <img src={produktIcon} alt="Obrazek 1" className="w-7 h-7 mr-2" />
-                Zarządzanie Produkatami
+                Produkty
             </li></Link>
             <Link to="/transakcje" className="text-black px-10 py-2 block font-customFont text-center w-max">
                 <li className='flex items-center'>

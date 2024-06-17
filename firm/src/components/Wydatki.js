@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import koszIcon from "../icons/kosz.png";
 import plusIcon from "../icons/plus.png";
+import ConfirmationModal from './ConfirmationModal';
 
 const Wydatki = () => {
   const [expenses, setExpenses] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [error, setError] = useState(null);
+  const [deleteExpenseId, setDeleteExpenseId] = useState(null);
   const [newExpense, setNewExpense] = useState({
     date: '',
     value: '',
@@ -50,9 +52,22 @@ const Wydatki = () => {
     try {
       await axios.delete(`https://localhost:7039/api/Expenses/${expenseId}`);
       fetchExpenses();
+      setDeleteExpenseId(null);
     } catch (error) {
       console.error('Błąd podczas usuwania wydatku:', error);
+      if (error.response && error.response.data) {
+        setError(error.response.data);
+      } else {
+        setError('Wystąpił nieoczekiwany błąd. Spróbuj ponownie później.');
+      }
     }
+  };
+  const openDeleteConfirmation = (transactionId) => {
+    setDeleteExpenseId(transactionId);
+  };
+  
+  const closeDeleteConfirmation = () => {
+    setDeleteExpenseId(null);
   };
 
   const formatDate = (dateString) => {
@@ -91,7 +106,7 @@ const Wydatki = () => {
                 <td className="border border-gray-300 p-2">{expense.value}</td>
                 <td className="border border-gray-300 p-2">{expense.description}</td>
                 <td className="border border-gray-300 p-2">
-                  <button onClick={() => handleDeleteExpense(expense.id)} className="mr-2 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded flex">
+                  <button onClick={() => openDeleteConfirmation(expense.id)} className="mr-2 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded flex">
                     <img src={koszIcon} alt="" className="w-8 h-8 mr-2" />Usuń</button>
                 </td>
               </tr>
@@ -151,6 +166,12 @@ const Wydatki = () => {
         </div>
         </div>
       )}
+      {deleteExpenseId && (
+        <ConfirmationModal
+        message="Czy na pewno chcesz usunąć ten raport?"
+        onCancel={closeDeleteConfirmation}
+        onConfirm={() => {handleDeleteExpense(deleteExpenseId); setDeleteExpenseId(false);}}
+        />)}
     </div>
   );
 };
