@@ -57,6 +57,10 @@ const Transakcje = () => {
   }, []);
 
   const handleAddTransaction = async () => {
+    if (!newTransaction.date || !newTransaction.employeeId || newTransaction.transactionProducts.some(product => !product.productName || !product.quantity)) {
+      setError('Proszę uzupełnić wszystkie pola.');
+      return;
+    }
     try {
       console.log('Nowa transakcja:', newTransaction);
       await axios.post('https://localhost:7039/api/Transaction', newTransaction);
@@ -91,11 +95,13 @@ const Transakcje = () => {
     }
   };
 
-
   const formatDate = (dateString) => {
     const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' };
     const date = new Date(dateString);
     return date.toLocaleDateString('pl-PL', options).replace(",", "");
+  };
+  const formatPrice = (price) => {
+    return parseFloat(price).toFixed(2);
   };
 
   const handleAddProduct = () => {
@@ -137,6 +143,11 @@ const Transakcje = () => {
       if (!editTransaction) {
         setEditTransaction(transaction);
         setIsEditModalOpen(true);
+        return;
+      }
+      if (!editTransaction.date || !editTransaction.employeeId || editTransaction.transactionProducts.some(product => !product.productName || !product.quantity) || !editTransaction.paymentType
+            || !editTransaction.description || !editTransaction.discount ) {
+        setError('Proszę uzupełnić wszystkie pola.');
         return;
       }
       await axios.put(`https://localhost:7039/api/Transaction/${editTransaction.id}`, editTransaction);
@@ -203,7 +214,7 @@ const Transakcje = () => {
         </div>
       )}
       {isEditModalOpen && editTransaction && (
-      <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center">
+      <div className="absolute top-0 left-0 w-full h-screen bg-black bg-opacity-50 flex items-center justify-center">
     <div className="bg-white p-8 rounded-lg">
       <h2 className="text-2xl font-bold mb-4">Edytuj transakcję</h2>
       <input
@@ -214,6 +225,7 @@ const Transakcje = () => {
         placeholder="Data"
         className="block w-full mb-4 px-4 py-2 border border-gray-300 rounded-lg"
       />
+      Numer Pracownika
       <input
         type="number"
         name="employeeId"
@@ -230,7 +242,9 @@ const Transakcje = () => {
           onChange={(selectedOption) => handleEditProductChange(index, selectedOption)}
           options={products}
           className="block w-full mb-4"
+          placeholder="Wybierz produkt..."
           />
+          Ilość
           <input
             type="number"
             name={`quantity-${index}`}
@@ -253,6 +267,7 @@ const Transakcje = () => {
         placeholder="Sposób płatności"
         className="block w-full mb-4 px-4 py-2 border border-gray-300 rounded-lg"
       />
+      Zniżka
       <input
         type="number"
         name="discount"
@@ -316,6 +331,7 @@ const Transakcje = () => {
                   onChange={(selectedOption) => handleProductChange(index, selectedOption)}
                   options={products}
                   className="block w-full mb-4"
+                  placeholder="Wybierz produkt..."
                   />
                 <input
                   type="number"
@@ -328,12 +344,12 @@ const Transakcje = () => {
                   }}
                   placeholder="Ilość"  className="block w-full mb-4 px-4 py-2 border border-gray-300 rounded-lg"
                   />
-                  <button onClick={() => handleRemoveProduct(index)} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                  <button onClick={() => handleRemoveProduct(index)} className="bg-red-500 hover:bg-red-700 text-white font-bold my-2 py-2 px-4 rounded">
                     Usuń
                   </button>
                 </div>
               ))}
-              <button onClick={handleAddProduct} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+              <button onClick={handleAddProduct} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 my-3 rounded">
                 Dodaj
               </button>
               <input
@@ -372,7 +388,7 @@ const Transakcje = () => {
               </button>
               <button
                 onClick={() => setIsModalOpen(false)}
-                className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 mx-1 rounded"
               >
                 Anuluj
               </button>
@@ -410,10 +426,13 @@ const Transakcje = () => {
                         <div key={product.id}>{product.quantity}</div>
                       ))}
                     </td>
-                    <td className="border border-gray-300 p-2">{transaction.totalPrice}</td>
+                    <td className="border border-gray-300 p-2">{formatPrice(transaction.totalPrice)}</td>
                     <td className="border border-gray-300 p-2">{transaction.paymentType}</td>
                     <td className="border border-gray-300 p-2">{transaction.employeeId}</td>
-                    <td className="border border-gray-300 p-2"><button  onClick={() => handleEditTransaction(transaction)}
+                    <td className="border border-gray-300 p-2"><button  onClick={() =>{handleEditTransaction(transaction);
+                      console.log(transaction);
+                    }
+                        }
                         className="mr-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded flex">
                         <img src={editIcon} alt="" className="w-8 h-8 mr-2" />Edytuj
                         </button></td>

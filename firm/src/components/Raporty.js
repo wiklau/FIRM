@@ -5,6 +5,7 @@ import koszIcon from "../icons/kosz.png";
 const Raporty = () => {
   const [fromDate, setFromDate] = useState('');
   const [toDate, setToDate] = useState('');
+  const [error, setError] = useState(null);
   const [reports, setReports] = useState([]);
 
   const fetchReports = async () => {
@@ -21,7 +22,12 @@ const Raporty = () => {
   }, []);
 
   const handleGenerateReport = async () => {
+    if (!fromDate || !toDate) {
+      setError('Proszę uzupełnić wszystkie pola.');
+      return;
+    }
     try {
+      console.log('Wysyłane dane:', fromDate, toDate);
       const response = await axios.post('https://localhost:7039/api/Report', {
         fromDate,
         toDate
@@ -58,10 +64,10 @@ const Raporty = () => {
       </div>
       <div className="mt-5">
         <label htmlFor="fromDate" className="mr-3">Od:</label>
-        <input type="date" id="fromDate" value={fromDate} onChange={(e) => setFromDate(e.target.value)} className="mr-5" />
+        <input type="datetime-local" id="fromDate" value={fromDate} onChange={(e) => setFromDate(e.target.value)} className="mr-5" />
         <label htmlFor="toDate" className="mr-3">Do:</label>
-        <input type="date" id="toDate" value={toDate} onChange={(e) => setToDate(e.target.value)} className="mr-5" />
-        <button onClick={handleGenerateReport} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Generuj</button>
+        <input type="datetime-local" id="toDate" value={toDate} onChange={(e) => setToDate(e.target.value)} className="mr-5" />
+        <button onClick={() =>{handleGenerateReport(); console.log()}} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Generuj</button>
       </div>
       <div className="mt-5">
         <h2 className="text-2xl font-bold mb-4">Raporty</h2>
@@ -95,6 +101,17 @@ const Raporty = () => {
           </tbody>
         </table>
       </div>
+      {error && (
+        <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center">
+        <div className="bg-white p-8 rounded-lg">
+        <h2 className="text-2xl font-bold mb-4">Błąd</h2>
+        <p>{error}</p>
+        <button onClick={() => window.location.reload()} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+        Zamknij
+        </button>
+        </div>
+        </div>
+      )}
     </div>
   );
 };

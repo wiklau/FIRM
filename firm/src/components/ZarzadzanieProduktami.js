@@ -9,6 +9,7 @@ const ZarzadzanieProduktami = () => {
   const [products, setProducts] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [error, setError] = useState(null);
   const [deleteProductId, setDeleteProductId] = useState(null);
   const [newProduct, setNewProduct] = useState({
     name: "",
@@ -38,6 +39,10 @@ const ZarzadzanieProduktami = () => {
   };
 
   const handleAddProduct = async () => {
+    if (!newProduct.name || !newProduct.description || !newProduct.price || !newProduct.type || !newProduct.availability) {
+      setError('Proszę uzupełnić wszystkie pola.');
+      return;
+    }
     try {
       const config = {
         headers: {
@@ -65,6 +70,10 @@ const ZarzadzanieProduktami = () => {
   };
 
   const handleSaveEditedProduct = async () => {
+    if (!editProduct.name || !editProduct.description || !editProduct.price || !editProduct.type || !editProduct.availability) {
+      setError('Proszę uzupełnić wszystkie pola.');
+      return;
+    }
     try {
       await axios.put(`https://localhost:7039/api/Products/${editProduct.id}`, editProduct);
       fetchProducts();
@@ -91,6 +100,9 @@ const openDeleteConfirmation = (productId) => {
 const closeDeleteConfirmation = () => {
   setDeleteProductId(null);
 };
+const formatPrice = (price) => {
+  return parseFloat(price).toFixed(2);
+};
 
   return (
     <div className='p-10 ml-11'>
@@ -102,6 +114,17 @@ const closeDeleteConfirmation = () => {
           <img src={plusIcon} alt="" className="w-8 h-8 mr-2" />Dodaj
         </button>
       </div>
+      {error && (
+        <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center">
+        <div className="bg-white p-8 rounded-lg">
+        <h2 className="text-2xl font-bold mb-4">Błąd</h2>
+        <p>{error}</p>
+        <button onClick={() => window.location.reload()} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+        Zamknij
+        </button>
+        </div>
+        </div>
+      )}
       {isEditModalOpen && editProduct && (
         <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-8 rounded-lg shadow-lg">
@@ -147,7 +170,10 @@ const closeDeleteConfirmation = () => {
               className="block w-full mb-4 px-4 py-2 border border-gray-300 rounded-lg"
             />
             <button
-              onClick={handleSaveEditedProduct}
+            onClick={() => {
+              handleSaveEditedProduct();
+              setIsEditModalOpen(false);                
+              }}
               className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
             >
               Zapisz zmiany
@@ -206,7 +232,10 @@ const closeDeleteConfirmation = () => {
               className="block w-full mb-4 px-4 py-2 border border-gray-300 rounded-lg"
             />
             <button
-              onClick={handleAddProduct}
+                onClick={() => {
+                handleAddProduct();
+                setIsModalOpen(false)                
+              }}
               className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
             >
               Dodaj produkt
@@ -221,8 +250,8 @@ const closeDeleteConfirmation = () => {
         </div>
       )}
       <div className="w-8/10 mx-auto mt-2">
-        <div className="h-screen overflow-y-auto margin-0">
-          <table className="w-full border-collapse border border-gray-500">
+        <div className="h-screen overflow-y-auto">
+          <table className="w-full border-collapse border border-gray-300">
             <thead className="bg-gray-200 top-0 z-10 sticky">
               <tr>
                 <th className="border border-gray-300 p-2">ID</th>
@@ -241,7 +270,7 @@ const closeDeleteConfirmation = () => {
                   <td className="border border-gray-300 p-2">{product.id}</td>
                   <td className="border border-gray-300 p-2">{product.name}</td>
                   <td className="border border-gray-300 p-2">{product.description}</td>
-                  <td className="border border-gray-300 p-2">{product.price}</td>
+                  <td className="border border-gray-300 p-2">{formatPrice(product.price)}</td>
                   <td className="border border-gray-300 p-2">{product.type}</td>
                   <td className="border border-gray-300 p-2">{product.availability}</td>
                   <td className="border border-gray-300 p-2"><button  onClick={() => handleEditProduct(product)}

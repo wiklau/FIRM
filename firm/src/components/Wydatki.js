@@ -6,6 +6,7 @@ import plusIcon from "../icons/plus.png";
 const Wydatki = () => {
   const [expenses, setExpenses] = useState([]);
   const [showModal, setShowModal] = useState(false);
+  const [error, setError] = useState(null);
   const [newExpense, setNewExpense] = useState({
     date: '',
     value: '',
@@ -26,6 +27,10 @@ const Wydatki = () => {
   }, []);
 
   const handleAddExpense = async () => {
+    if (!newExpense.date || !newExpense.value || !newExpense.description) {
+      setError('Proszę uzupełnić wszystkie pola.');
+      return;
+    }
     try {
       const response = await axios.post('https://localhost:7039/api/Expenses', newExpense);
       const addedExpense = response.data;
@@ -58,19 +63,16 @@ const Wydatki = () => {
 
   return (
     <div className="p-10 ml-11">
-      <div className="flex items-center justify-between">
-        <div className="h-20 text-5xl ml-1">
-          Zarządzanie wydatkami
-        </div>
-      </div>
 
       <div className="mt-5">
-        <div className="flex justify-between items-center"> 
-        <h2 className="text-2xl font-bold mb-4">Wydatki</h2>
-        <button onClick={() => setShowModal(true)} className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
-        <img src={plusIcon} alt="" className="w-8 h-8 mr-2" />Dodaj
-        </button>
+      <div className='flex items-center justify-between'>
+        <div className='h-20 text-5xl ml-1'>
+          Wydatki
         </div>
+        <button onClick={() => setShowModal(true)} className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded flex">
+          <img src={plusIcon} alt="" className="w-8 h-8 mr-2" />Dodaj
+        </button>
+      </div>
         <table className="w-full border-collapse border border-gray-300">
           <thead className="bg-gray-200 top-0 z-10">
             <tr>
@@ -111,7 +113,7 @@ const Wydatki = () => {
                 <div className="grid grid-cols-6 gap-6">
                   <div className="col-span-6 sm:col-span-3">
                     <label htmlFor="expenseDate" className="block text-sm font-medium text-gray-700">Data</label>
-                    <input type="date" id="expenseDate" value={newExpense.date} onChange={(e) => setNewExpense({ ...newExpense, date: e.target.value })} className="mt-1 border py-1 px-3 block w-full shadow-sm sm:text-sm rounded-md" />
+                    <input type="datetime-local" id="expenseDate" value={newExpense.date} onChange={(e) => setNewExpense({ ...newExpense, date: e.target.value })} className="mt-1 border py-1 px-3 block w-full shadow-sm sm:text-sm rounded-md" />
                   </div>
 
                   <div className="col-span-6 sm:col-span-3">
@@ -127,7 +129,7 @@ const Wydatki = () => {
                 </div>
               </div>
               <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                <button onClick={handleAddExpense} type="button" className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-500 focus:outline-none focus:border-green-700 focus:shadow-outline-green transition ease-in-out duration-150 sm:text-sm sm:leading-5">
+                <button onClick={() => {handleAddExpense();setShowModal(false);}} type="button" className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-500 focus:outline-none focus:border-green-700 focus:shadow-outline-green transition ease-in-out duration-150 sm:text-sm sm:leading-5">
                 Dodaj
                 </button>
                 <button onClick={() => setShowModal(false)} type="button" className="mt-3 sm:mt-0 mr-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue transition ease-in-out duration-150 sm:text-sm sm:leading-5">
@@ -136,6 +138,17 @@ const Wydatki = () => {
                 </div>
             </div>
           </div>
+        </div>
+      )}
+        {error && (
+        <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center">
+        <div className="bg-white p-8 rounded-lg">
+        <h2 className="text-2xl font-bold mb-4">Błąd</h2>
+        <p>{error}</p>
+        <button onClick={() => window.location.reload()} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+        Zamknij
+        </button>
+        </div>
         </div>
       )}
     </div>
