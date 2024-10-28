@@ -16,8 +16,17 @@ const Wydatki = () => {
   });
 
   const fetchExpenses = async () => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      console.error('Brak tokena. Użytkownik musi być zalogowany.');
+      return;
+    }
     try {
-      const response = await axios.get('https://localhost:7039/api/Expenses');
+      const response = await axios.get('https://localhost:7039/api/Expenses', {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
       setExpenses(response.data);
     } catch (error) {
       console.error('Błąd podczas pobierania wydatków:', error);
@@ -33,8 +42,13 @@ const Wydatki = () => {
       setError('Proszę uzupełnić wszystkie pola.');
       return;
     }
+    const token = localStorage.getItem('token');
     try {
-      const response = await axios.post('https://localhost:7039/api/Expenses', newExpense);
+      const response = await axios.post('https://localhost:7039/api/Expenses', newExpense, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
       const addedExpense = response.data;
       setExpenses([...expenses, addedExpense]);
       setNewExpense({
@@ -45,12 +59,18 @@ const Wydatki = () => {
       setShowModal(false);
     } catch (error) {
       console.error('Błąd podczas dodawania wydatku:', error);
+      setError('Wystąpił błąd podczas dodawania wydatku.');
     }
   };
 
   const handleDeleteExpense = async (expenseId) => {
+    const token = localStorage.getItem('token');
     try {
-      await axios.delete(`https://localhost:7039/api/Expenses/${expenseId}`);
+      await axios.delete(`https://localhost:7039/api/Expenses/${expenseId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
       fetchExpenses();
       setDeleteExpenseId(null);
     } catch (error) {
@@ -62,10 +82,11 @@ const Wydatki = () => {
       }
     }
   };
-  const openDeleteConfirmation = (transactionId) => {
-    setDeleteExpenseId(transactionId);
+
+  const openDeleteConfirmation = (expenseId) => {
+    setDeleteExpenseId(expenseId);
   };
-  
+
   const closeDeleteConfirmation = () => {
     setDeleteExpenseId(null);
   };
@@ -78,16 +99,15 @@ const Wydatki = () => {
 
   return (
     <div className="p-10 ml-11">
-
       <div className="mt-5">
-      <div className='flex items-center justify-between'>
-        <div className='h-20 text-5xl ml-1'>
-          Wydatki
+        <div className='flex items-center justify-between'>
+          <div className='h-20 text-5xl ml-1'>
+            Wydatki
+          </div>
+          <button onClick={() => setShowModal(true)} className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded flex">
+            <img src={plusIcon} alt="" className="w-8 h-8 mr-2" />Dodaj
+          </button>
         </div>
-        <button onClick={() => setShowModal(true)} className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded flex">
-          <img src={plusIcon} alt="" className="w-8 h-8 mr-2" />Dodaj
-        </button>
-      </div>
         <table className="w-full border-collapse border border-gray-300">
           <thead className="bg-gray-200 top-0 z-10">
             <tr>
@@ -107,7 +127,8 @@ const Wydatki = () => {
                 <td className="border border-gray-300 p-2">{expense.description}</td>
                 <td className="border border-gray-300 p-2">
                   <button onClick={() => openDeleteConfirmation(expense.id)} className="mr-2 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded flex">
-                    <img src={koszIcon} alt="" className="w-8 h-8 mr-2" />Usuń</button>
+                    <img src={koszIcon} alt="" className="w-8 h-8 mr-2" />Usuń
+                  </button>
                 </td>
               </tr>
             ))}
@@ -140,41 +161,41 @@ const Wydatki = () => {
                     <label htmlFor="expenseDescription" className="block text-sm font-medium text-gray-700">Opis</label>
                     <textarea id="expenseDescription" value={newExpense.description} onChange={(e) => setNewExpense({ ...newExpense, description: e.target.value })} 
                     className="mt-1 border py-2 px-3 block w-full shadow-sm sm:text-sm rounded-md" rows="4"/>
-                    </div>
+                  </div>
                 </div>
               </div>
               <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                <button onClick={() => {handleAddExpense();setShowModal(false);}} type="button" className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-500 focus:outline-none focus:border-green-700 focus:shadow-outline-green transition ease-in-out duration-150 sm:text-sm sm:leading-5">
-                Dodaj
+                <button onClick={() => { handleAddExpense(); }} type="button" className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-500 focus:outline-none focus:border-green-700 focus:shadow-outline-green transition ease-in-out duration-150 sm:text-sm sm:leading-5">
+                  Dodaj
                 </button>
                 <button onClick={() => setShowModal(false)} type="button" className="mt-3 sm:mt-0 mr-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue transition ease-in-out duration-150 sm:text-sm sm:leading-5">
-                Anuluj
+                  Anuluj
                 </button>
-                </div>
+              </div>
             </div>
           </div>
         </div>
       )}
-        {error && (
+      {error && (
         <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center">
-        <div className="bg-white p-8 rounded-lg">
-        <h2 className="text-2xl font-bold mb-4">Błąd</h2>
-        <p>{error}</p>
-        <button onClick={() => window.location.reload()} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
-        Zamknij
-        </button>
-        </div>
+          <div className="bg-white p-8 rounded-lg">
+            <h2 className="text-2xl font-bold mb-4">Błąd</h2>
+            <p>{error}</p>
+            <button onClick={() => window.location.reload()} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+              Zamknij
+            </button>
+          </div>
         </div>
       )}
       {deleteExpenseId && (
         <ConfirmationModal
-        message="Czy na pewno chcesz usunąć ten raport?"
-        onCancel={closeDeleteConfirmation}
-        onConfirm={() => {handleDeleteExpense(deleteExpenseId); setDeleteExpenseId(false);}}
-        />)}
+          message="Czy na pewno chcesz usunąć ten raport?"
+          onCancel={closeDeleteConfirmation}
+          onConfirm={() => { handleDeleteExpense(deleteExpenseId); }}
+        />
+      )}
     </div>
   );
 };
 
 export default Wydatki;
-

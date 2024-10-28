@@ -1,12 +1,20 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import lupaIcon from "../icons/lupa.jpg";
 import domIcon from "../icons/dom.png";
 import profilIcon from "../icons/profil.png";
 import settingsIcon from "../icons/settings.png";
 import znakIcon from "../icons/znak.png";
 
-const Navbar = () => {
+const Navbar = ({ setToken }) => {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    setToken(null);
+    localStorage.removeItem('token');
+    navigate('/login');
+  };
+
   return (
     <div className="flex items-center justify-between bg-gray-300 p-7 h-16">
       <div className="flex items-center flex-shrink-0 text-black mr-6">
@@ -22,7 +30,12 @@ const Navbar = () => {
         <Link to="/"><img src={domIcon} alt="" className="w-8 h-8 mr-2" /></Link>
         <Link to="/"><img src={znakIcon} alt="" className="w-8 h-8 mr-2" /></Link>
         <Link to="/"><img src={settingsIcon} alt="" className="w-8 h-8 mr-2" /></Link>
-        <Link to="/"><img src={profilIcon} alt="" className="w-8 h-8 mr-2" /></Link>
+        <img 
+          src={profilIcon} 
+          alt="Profil" 
+          className="w-8 h-8 mr-2 cursor-pointer" 
+          onClick={handleLogout}
+        />
       </div>
     </div>
   );

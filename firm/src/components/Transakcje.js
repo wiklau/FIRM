@@ -34,16 +34,34 @@ const Transakcje = () => {
   });
 
   const fetchTransactions = async () => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      console.error('Brak tokena. Użytkownik musi być zalogowany.');
+      return;
+    }
     try {
-      const response = await axios.get('https://localhost:7039/api/Transaction');
+      const response = await axios.get('https://localhost:7039/api/Transaction', {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
       setTransactions(response.data);
     } catch (error) {
       console.error('Błąd podczas dodawania transakcji:', error);
     }
   };
   const fetchProducts = async () => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      console.error('Brak tokena. Użytkownik musi być zalogowany.');
+      return;
+    }
     try {
-      const response = await axios.get('https://localhost:7039/api/Products');
+      const response = await axios.get('https://localhost:7039/api/Products', {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
       setProducts(response.data.map(product => ({ value: product.id, label: product.name })));
     } catch (error) {
       console.error('Błąd podczas pobierania produktów:', error);
