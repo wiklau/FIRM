@@ -21,8 +21,18 @@ const ZarzadzanieProduktami = () => {
   const [editProduct, setEditProduct] = useState(null);
 
   const fetchProducts = async () => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      console.error('Brak tokena. Użytkownik musi być zalogowany.');
+      return;
+    }
+
     try {
-      const response = await axios.get('https://localhost:7039/api/Products');
+      const response = await axios.get('https://localhost:7039/api/products', {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
       setProducts(response.data);
     } catch (error) {
       console.error('Błąd podczas pobierania produktów:', error);
