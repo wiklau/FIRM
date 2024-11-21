@@ -3,7 +3,11 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import PanelAdministratora from './components/PanelAdministratora';
 import ZarzadzanieProduktami from './components/ZarzadzanieProduktami';
-import Transakcje from './components/Transakcje';
+import DodawanieProduktu from './components/DodawanieProduktów';
+import EdycjaProduktu from './components/EdycjaProduktu';
+import ZarzadzanieTransakcjami from './components/ZarzadzanieTransakcjami';
+import DodawanieTransakcji from './components/DodawanieTransakcji';
+import EdycjaTransakcji from './components/EdycjaTransakcji';
 import NavBar from './components/NavBar';
 import Sidebar from './components/Sidebar';
 import Wydatki from './components/Wydatki';
@@ -43,22 +47,18 @@ const App = () => {
           )}
           <div className="w-3/4">
             <Routes>
-              {/* Przekierowanie na stronę logowania, jeśli token jest pusty */}
               <Route path="/" element={token ? <Navigate to="/transakcje" /> : <Navigate to="/login" />} />
-              
-              {/* Strona logowania */}
               <Route path="/login" element={token ? <Navigate to="/transakcje" /> : <Login setToken={setToken} />} />
-              
-              {/* Chronione ścieżki */}
-              <Route path="/transakcje" element={token ? <Transakcje /> : <Navigate to="/login" />} />
+              <Route path="/transakcje" element={token ? <ZarzadzanieTransakcjami /> : <Navigate to="/login" />} />
+              <Route path="/transakcje/dodaj" element={token ? <DodawanieTransakcji /> : <Navigate to="/login" />} />
+              <Route path="/transakcje/edytuj/:id" element={token ? <EdycjaTransakcji /> : <Navigate to="/login" />} />
               <Route path="/panel" element={token ? <PanelAdministratora /> : <Navigate to="/login" />} />
               <Route path="/produkty" element={token ? <ZarzadzanieProduktami /> : <Navigate to="/login" />} />
+              <Route path="/produkty/dodaj" element={token ? <DodawanieProduktu /> : <Navigate to="/login" />} />
+              <Route path="/produkty/edytuj/:id" element={token ? <EdycjaProduktu /> : <Navigate to="/login" />} />
               <Route path="/wydatki" element={token ? <Wydatki /> : <Navigate to="/login" />} />
               <Route path="/raporty" element={token ? <Raporty /> : <Navigate to="/login" />} />
               <Route path="/harmonogram" element={token ? <Harmonogram /> : <Navigate to="/login" />} />
-              
-              {/* Przekierowanie dla nieznanych ścieżek */}
-              <Route path="*" element={<Navigate to="/login" />} />
             </Routes>
           </div>
         </div>
