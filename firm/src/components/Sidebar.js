@@ -9,16 +9,16 @@ import raportyIcon from "../icons/raport.png";
 
 const Sidebar = ({ userRole }) => {
     return (
-        <div className="bg-gray-200 h-screen flex justify-center marign-0 w-max">
-          <ul className="">
-          {userRole !== 'User' && (
-              <>
-            <Link to="/panel" className="text-black px-10 py-2 block font-customFont text-center w-max">
-                <li className='flex items-center'>
-                <img src={adminIcon} alt="Obrazek 1" className="w-7 h-7 mr-2" />
-                Panel Administratora
-            </li></Link>
-              </>
+        <div className="bg-gray-200 h-screen flex-grow justify-center w-max sticky top-0 z-0">
+          <ul>
+            {userRole !== 'User' && (
+                <>
+                  <Link to="/panel" className="text-black px-10 py-2 block font-customFont text-center w-max">
+                      <li className='flex items-center'>
+                      <img src={adminIcon} alt="Obrazek 1" className="w-7 h-7 mr-2" />
+                      Panel Administratora
+                  </li></Link>
+                </>
             )}
             <Link to="/produkty" className="text-black px-10 py-2 block font-customFont text-center w-max">
                 <li className='flex items-center'>
@@ -51,6 +51,7 @@ const Sidebar = ({ userRole }) => {
             )}
           </ul>
         </div>
-      );
+    );
 }
+
 export default Sidebar;

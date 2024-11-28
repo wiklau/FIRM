@@ -16,7 +16,7 @@ const Navbar = ({ setToken }) => {
   };
 
   return (
-    <div className="flex items-center justify-between bg-gray-300 p-7 h-16">
+    <div className="flex items-center justify-between bg-gray-300 p-7 h-16 top-0">
       <div className="flex items-center flex-shrink-0 text-black mr-6">
         <Link to="/" className="text-2xl font-customFont font-bold tracking-wide">FIRMTRACKER</Link>
       </div>

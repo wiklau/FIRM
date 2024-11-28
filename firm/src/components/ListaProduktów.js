@@ -81,7 +81,7 @@ const ListaProduktow = ({ onAdd }) => {
                 <td className="p-2 border">{product.name}</td>
                 <td className="p-2 border">{product.description}</td>
                 <td className="p-2 border">{parseFloat(product.price).toFixed(2)}</td>
-                <td className="p-2 border">{product.availability}</td>
+                <td className="p-2 border">{product.type === 0 ? "" : product.availability}</td>
                 <td className="p-2 border">
                   <button
                     onClick={() => handleEditProduct(product.id)}
