@@ -90,6 +90,10 @@ const EdycjaTransakcji = () => {
     return Object.keys(validationErrors).length === 0;
   };
 
+  const handleCancel = () => {
+    navigate('/transkacje');
+  }
+
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setTransaction((prev) => ({ ...prev, [name]: value }));
@@ -199,9 +203,10 @@ const EdycjaTransakcji = () => {
   };
 
   return (
-    <div className="bg-white p-8 rounded-lg">
-      <h2 className="text-2xl font-bold mb-4">Edycja Transakcji</h2>
+    <div className="bg-white p-8 rounded-lg shadow-lg max-w-4xl mx-auto mt-6">
+      <h2 className="text-2xl font-bold mb-6 text-gray-800">Edycja Transakcji</h2>
       {error && <p className="text-red-500 mb-4">{error}</p>}
+  
       <div className="mb-4">
         <input
           type="datetime-local"
@@ -209,10 +214,11 @@ const EdycjaTransakcji = () => {
           value={transaction.date}
           onChange={handleInputChange}
           placeholder="Data"
-          className="block w-full px-4 py-2 border border-gray-300 rounded-lg"
+          className="block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
         {errors.date && <span className="text-red-500 text-sm">{errors.date}</span>}
       </div>
+  
       <div className="mb-4">
         <input
           type="number"
@@ -220,10 +226,11 @@ const EdycjaTransakcji = () => {
           value={transaction.employeeId}
           onChange={handleInputChange}
           placeholder="Nr. Pracownika"
-          className="block w-full px-4 py-2 border border-gray-300 rounded-lg"
+          className="block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
         {errors.employeeId && <span className="text-red-500 text-sm">{errors.employeeId}</span>}
       </div>
+  
       {transaction.transactionProducts.map((product, index) => (
         <div key={index} className="mb-4">
           <Select
@@ -241,25 +248,27 @@ const EdycjaTransakcji = () => {
             value={product.quantity}
             onChange={(e) => handleQuantityChange(index, e.target.value)}
             placeholder="Ilość"
-            className="block w-full px-4 py-2 border border-gray-300 rounded-lg"
+            className="block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           {errors[`quantity_${index}`] && (
             <span className="text-red-500 text-sm">{errors[`quantity_${index}`]}</span>
           )}
           <button
             onClick={() => handleRemoveProduct(index)}
-            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+            className="bg-gradient-to-r from-red-500 to-red-700 text-white py-2 px-4 rounded-lg hover:from-red-600 hover:to-red-800 transition mt-3"
           >
             Usuń
           </button>
         </div>
       ))}
+  
       <button
         onClick={handleAddProduct}
-        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        className="bg-gradient-to-r from-blue-500 to-blue-700 text-white font-bold py-2 px-4 mb-3 rounded-lg shadow-md hover:from-blue-600 hover:to-blue-800 transition"
       >
         Dodaj produkt
       </button>
+  
       <div className="mb-4">
         <input
           type="text"
@@ -267,12 +276,11 @@ const EdycjaTransakcji = () => {
           value={transaction.paymentType}
           onChange={handleInputChange}
           placeholder="Sposób płatności"
-          className="block w-full px-4 py-2 border border-gray-300 rounded-lg"
+          className="block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
-        {errors.paymentType && (
-          <span className="text-red-500 text-sm">{errors.paymentType}</span>
-        )}
+        {errors.paymentType && <span className="text-red-500 text-sm">{errors.paymentType}</span>}
       </div>
+  
       <div className="mb-4">
         <input
           type="number"
@@ -280,18 +288,27 @@ const EdycjaTransakcji = () => {
           value={transaction.discount}
           onChange={handleInputChange}
           placeholder="Rabat"
-          className="block w-full px-4 py-2 border border-gray-300 rounded-lg"
+          className="block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
         {errors.discount && <span className="text-red-500 text-sm">{errors.discount}</span>}
       </div>
-      <button
-        onClick={handleSaveChanges}
-        className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-      >
-        Zapisz zmiany
-      </button>
+      <div className="mt-6 flex justify-between">
+        <button
+          onClick={handleSaveChanges}
+          className="bg-gradient-to-r from-green-500 to-green-700 text-white font-bold py-2 px-4 rounded-lg shadow-md hover:from-green-600 hover:to-green-800 transition"
+        >
+          Zapisz zmiany
+        </button>
+  
+        <button
+          onClick={handleCancel}
+          className="bg-gradient-to-r from-red-500 to-red-700 text-white font-bold py-2 px-4 rounded-lg shadow-md hover:from-red-600 hover:to-red-800 transition ml-4"
+        >
+          Anuluj
+        </button>
+      </div>
     </div>
-  );
+  );  
 };
 
 export default EdycjaTransakcji;

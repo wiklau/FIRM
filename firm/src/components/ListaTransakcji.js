@@ -87,56 +87,56 @@ const ListaTransakcji = ({ onAdd}) => {
 
   return (
     <div>
-      <div className="flex items-center justify-between">
-        <h1 className="text-5xl">Lista Transakcji</h1>
-        <button onClick={onAdd} className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+      <div className="flex items-center justify-between py-6 px-8 bg-gradient-to-r from-blue-500 to-teal-500 rounded-xl shadow-md mb-6">
+        <h1 className="text-white text-4xl font-semibold">Lista Transakcji</h1>
+        <button onClick={onAdd} className="bg-gradient-to-r from-green-500 to-green-700 text-white py-2 px-4 rounded-lg hover:from-green-600 hover:to-green-800 transition">
           Dodaj Transakcję
         </button>
       </div>
       <div className="w-8/10 mx-auto mt-2">
         <div className="h-screen overflow-y-auto">
-          <table className="w-full border-collapse border border-gray-300">
-            <thead className="bg-gray-200">
+          <table className="w-full border border-gray-300 rounded-lg shadow-lg overflow-hidden">
+            <thead className="bg-gray-100 text-gray-700">
               <tr>
-                <th className="border border-gray-300 p-2">ID</th>
-                <th className="border border-gray-300 p-2">Data</th>
-                <th className="border border-gray-300 p-2">Produkt</th>
-                <th className="border border-gray-300 p-2">Ilość</th>
-                <th className="border border-gray-300 p-2">Kwota</th>
-                <th className="border border-gray-300 p-2">Sposób płatności</th>
-                <th className="border border-gray-300 p-2">Nr. Pracownika</th>
-                <th className="border border-gray-300 p-2"></th>
+                <th className="p-3 text-left">ID</th>
+                <th className="p-3 text-left">Data</th>
+                <th className="p-3 text-left">Produkt</th>
+                <th className="p-3 text-left">Ilość</th>
+                <th className="p-3 text-left">Kwota</th>
+                <th className="p-3 text-left">Sposób płatności</th>
+                <th className="p-3 text-center">Nr. Pracownika</th>
+                <th className="p-3 text-center">Akcje</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="text-gray-600">
               {transactions.map(transaction => (
-                <tr key={transaction.id}>
-                  <td className="border border-gray-300 p-2">{transaction.id}</td>
-                  <td className="border border-gray-300 p-2">{formatDate(transaction.date)}</td>
-                  <td className="border border-gray-300 p-2">
+                <tr key={transaction.id} className="hover:bg-gray-50 transition-colors">
+                  <td className="p-3">{transaction.id}</td>
+                  <td className="p-3">{formatDate(transaction.date)}</td>
+                  <td className="p-3">
                     {transaction.transactionProducts.map(product => (
                       <div key={product.id}>{product.product.name}</div>
                     ))}
                   </td>
-                  <td className="border border-gray-300 p-2">
+                  <td className="p-3">
                     {transaction.transactionProducts.map(product => (
                       <div key={product.id}>{product.quantity}</div>
                     ))}
                   </td>
-                  <td className="border border-gray-300 p-2">{formatPrice(transaction.totalPrice)}</td>
-                  <td className="border border-gray-300 p-2">{transaction.paymentType}</td>
-                  <td className="border border-gray-300 p-2">{transaction.employeeId}</td>
-                  <td className="p-2 border">
+                  <td className="p-3">{formatPrice(transaction.totalPrice)}</td>
+                  <td className="p-3">{transaction.paymentType}</td>
+                  <td className="p-3 text-center">{transaction.employeeId}</td>
+                  <td className="p-3 flex justify-center space-x-2">
                     <button
                       onClick={() => handleEditTransaction(transaction.id)}
-                      className="mr-2 bg-blue-500 text-white py-2 px-4 rounded"
+                      className="bg-gradient-to-r from-blue-500 to-blue-700 text-white py-2 px-4 rounded-lg hover:from-blue-600 hover:to-blue-800 transition"
                     >
                       <img src={editIcon} alt="Edytuj" className="inline w-5 mr-2" />
                       Edytuj
                     </button>
                     <button
                       onClick={() => openDeleteConfirmation(transaction.id)}
-                      className="bg-red-500 text-white py-2 px-4 rounded"
+                      className="bg-gradient-to-r from-red-500 to-red-700 text-white py-2 px-4 rounded-lg hover:from-red-600 hover:to-red-800 transition"
                     >
                       <img src={koszIcon} alt="Usuń" className="inline w-5 mr-2" />
                       Usuń
@@ -148,6 +148,8 @@ const ListaTransakcji = ({ onAdd}) => {
           </table>
         </div>
       </div>
+
+
 
       {showModal && (
         <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50">

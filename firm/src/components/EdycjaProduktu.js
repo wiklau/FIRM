@@ -46,6 +46,10 @@ const EdycjaProduktu = () => {
     fetchProduct();
   }, [id]);
 
+  const handleCancel = () => {
+    navigate('/produkty');
+  }
+
   const handleInputChange = (event) => {
     const { name, value } = event.target;
 
@@ -125,86 +129,92 @@ const EdycjaProduktu = () => {
   };
 
   return (
-    <div className="p-8 bg-gray-100 rounded-lg shadow-md">
-      <h2 className="text-2xl font-bold mb-4">Edycja produktu</h2>
-      {errors.general && <p className="text-red-500 mb-4">{errors.general}</p>}
-
-      <div className="grid grid-cols-2 gap-8">
-        <div className="relative">
-          <input
-            type="text"
-            name="name"
-            value={product.name}
-            onChange={handleInputChange}
-            placeholder="Nazwa produktu lub usługi"
-            className="block w-full px-4 py-2 border border-gray-300 rounded-lg"
-          />
-          {errors.name && <span className="absolute text-red-500 text-sm">{errors.name}</span>}
-        </div>
-
-        <div className="relative">
-          <input
-            type="text"
-            name="description"
-            value={product.description}
-            onChange={handleInputChange}
-            placeholder="Opis"
-            className="block w-full px-4 py-2 border border-gray-300 rounded-lg"
-          />
-          {errors.description && <span className="absolute text-red-500 text-sm">{errors.description}</span>}
-        </div>
-
-        <div className="relative">
-          <input
-            type="number"
-            step="0.01"
-            name="price"
-            value={product.price}
-            onChange={handleInputChange}
-            placeholder="Cena"
-            className="block w-full px-4 py-2 border border-gray-300 rounded-lg"
-          />
-          {errors.price && <span className="absolute text-red-500 text-sm">{errors.price}</span>}
-        </div>
-
-        <div className="relative">
-          <select
-            name="type"
-            value={product.type}
-            onChange={handleInputChange}
-            className="block w-full px-4 py-2 border border-gray-300 rounded-lg"
-          >
-            <option value="1">Produkt</option>
-            <option value="0">Usługa</option>
-          </select>
-          {errors.type && <span className="absolute text-red-500 text-sm">{errors.type}</span>}
-        </div>
-
-        {product.type === '1' && (
+    <div className="min-h-screen flex justify-center pt-10">
+      <div className="p-8 bg-white rounded-lg shadow-lg border border-gray-200 w-full max-w-4xl h-max">
+        <h2 className="text-2xl font-semibold text-gray-900 mb-4">Edycja produktu</h2>
+        {errors.general && <p className="text-red-500 mb-4">{errors.general}</p>}
+  
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="relative">
+            <input
+              type="text"
+              name="name"
+              value={product.name}
+              onChange={handleInputChange}
+              placeholder="Nazwa produktu lub usługi"
+              className="block w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            />
+            {errors.name && <span className="absolute text-red-500 text-sm">{errors.name}</span>}
+          </div>
+  
+          <div className="relative">
+            <input
+              type="text"
+              name="description"
+              value={product.description}
+              onChange={handleInputChange}
+              placeholder="Opis"
+              className="block w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            />
+            {errors.description && <span className="absolute text-red-500 text-sm">{errors.description}</span>}
+          </div>
+  
           <div className="relative">
             <input
               type="number"
-              name="availability"
-              value={product.availability}
+              step="0.01"
+              name="price"
+              value={product.price}
               onChange={handleInputChange}
-              placeholder="Dostępność (ilość)"
-              className="block w-full px-4 py-2 border border-gray-300 rounded-lg"
+              placeholder="Cena"
+              className="block w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
             />
-            {errors.availability && <span className="absolute text-red-500 text-sm">{errors.availability}</span>}
+            {errors.price && <span className="absolute text-red-500 text-sm">{errors.price}</span>}
           </div>
-        )}
-      </div>
-
-      <div className="mt-4">
-        <button
-          onClick={handleSaveChanges}
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-        >
-          Zapisz zmiany
-        </button>
+  
+          <div className="relative">
+            <select
+              name="type"
+              value={product.type}
+              onChange={handleInputChange}
+              className="block w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            >
+              <option value="1">Produkt</option>
+              <option value="0">Usługa</option>
+            </select>
+            {errors.type && <span className="absolute text-red-500 text-sm">{errors.type}</span>}
+          </div>
+  
+          {product.type === '1' && (
+            <div className="relative">
+              <input
+                type="number"
+                name="availability"
+                value={product.availability}
+                onChange={handleInputChange}
+                placeholder="Dostępność (ilość)"
+                className="block w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+              />
+              {errors.availability && <span className="absolute text-red-500 text-sm">{errors.availability}</span>}
+            </div>
+          )}
+        </div>
+  
+        <div className="mt-6 flex justify-between">
+          <button
+           onClick={handleCancel}
+           className="bg-gradient-to-r from-red-500 to-red-700 text-white py-2 px-4 rounded-lg hover:from-red-600 hover:to-red-800 transition"
+           >Anuluj</button>
+          <button
+            onClick={handleSaveChanges}
+            className="bg-gradient-to-r from-green-500 to-green-700 text-white py-2 px-4 rounded-lg hover:from-green-600 hover:to-green-800 transition"
+          >
+            Zapisz zmiany
+          </button>
+        </div>
       </div>
     </div>
-  );
+  );  
 };
 
 export default EdycjaProduktu;

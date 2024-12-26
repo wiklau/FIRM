@@ -63,6 +63,9 @@ const DodawanieTransakcji = () => {
     const { name, value } = event.target;
     setNewTransaction({ ...newTransaction, [name]: value });
   };
+  const handleCancel = () => {
+    navigate('/transakcje');
+  }
 
   const handleProductChange = (index, selectedOption) => {
     const updatedTransactionProducts = [...newTransaction.transactionProducts];
@@ -153,29 +156,29 @@ const DodawanieTransakcji = () => {
   };
 
   return (
-    <div className="bg-white p-8 rounded-lg">
-      <h2 className="text-2xl font-bold mb-4">Dodaj nową transakcję</h2>
-      
+    <div className="bg-white p-8 rounded-lg shadow-lg max-w-4xl mx-auto mt-6">
+      <h2 className="text-2xl font-bold mb-6 text-gray-800">Dodaj nową transakcję</h2>
+  
       {error && <p className="text-red-500 mb-4">{error}</p>}
-
+  
       <input
         type="datetime-local"
         name="date"
         value={newTransaction.date}
         onChange={handleInputChange}
         placeholder="Data"
-        className="block w-full mb-4 px-4 py-2 border border-gray-300 rounded-lg"
+        className="block w-full mb-4 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
-
+  
       <input
         type="number"
         name="employeeId"
         value={newTransaction.employeeId}
         onChange={handleInputChange}
         placeholder="Nr. Pracownika"
-        className="block w-full mb-4 px-4 py-2 border border-gray-300 rounded-lg"
+        className="block w-full mb-4 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
-
+  
       {isLoading ? (
         <div className="text-center">Ładowanie produktów...</div>
       ) : (
@@ -200,11 +203,11 @@ const DodawanieTransakcji = () => {
                   setNewTransaction({ ...newTransaction, transactionProducts: updatedTransactionProducts });
                 }}
                 placeholder="Ilość"
-                className="block w-full mb-2 px-4 py-2 border border-gray-300 rounded-lg"
+                className="block w-full mb-2 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
               <button
                 onClick={() => handleRemoveProduct(index)}
-                className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                className="bg-gradient-to-r from-red-500 to-red-700 text-white py-2 px-4 rounded-lg hover:from-red-600 hover:to-red-800 transition"
               >
                 Usuń
               </button>
@@ -212,49 +215,58 @@ const DodawanieTransakcji = () => {
           ))}
         </>
       )}
-      
+  
       <button
         onClick={handleAddProduct}
-        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 my-3 rounded"
+        className="bg-gradient-to-r from-blue-500 to-blue-700 text-white py-2 px-4 rounded-lg hover:from-blue-600 hover:to-blue-800 transition mb-3"
       >
         Dodaj produkt
       </button>
-
+  
       <input
         type="text"
         name="paymentType"
         value={newTransaction.paymentType}
         onChange={handleInputChange}
         placeholder="Sposób płatności"
-        className="block w-full mb-4 px-4 py-2 border border-gray-300 rounded-lg"
+        className="block w-full mb-4 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
-
+  
       <input
         type="number"
         name="discount"
         value={newTransaction.discount}
         onChange={handleInputChange}
         placeholder="Rabat"
-        className="block w-full mb-4 px-4 py-2 border border-gray-300 rounded-lg"
+        className="block w-full mb-4 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
-
+  
       <input
         type="text"
         name="description"
         value={newTransaction.description}
         onChange={handleInputChange}
         placeholder="Opis"
-        className="block w-full mb-4 px-4 py-2 border border-gray-300 rounded-lg"
+        className="block w-full mb-4 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
-
-      <button
-        onClick={handleAddTransaction}
-        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 my-3 rounded"
-      >
-        Dodaj transakcję
-      </button>
+  
+      <div className="mt-6 flex justify-between">
+        <button
+          onClick={handleAddTransaction}
+          className="bg-gradient-to-r from-blue-500 to-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow-md hover:from-blue-600 hover:to-blue-800 transition"
+        >
+          Dodaj transakcję
+        </button>
+  
+        <button
+          onClick={handleCancel}
+          className="bg-gradient-to-r from-red-500 to-red-700 text-white py-2 px-4 rounded-lg hover:from-red-600 hover:to-red-800 transition"
+        >
+          Anuluj
+        </button>
+      </div>
     </div>
-  );
+  );  
 };
 
 export default DodawanieTransakcji;
