@@ -4,6 +4,7 @@ import editIcon from '../icons/edit.png';
 import koszIcon from '../icons/kosz.png';
 import { useNavigate } from 'react-router-dom';
 
+
 const ListaTransakcji = ({ onAdd}) => {
   const [transactions, setTransactions] = useState([]);
   const [deleteTransactionId, setDeleteTransactionId] = useState(null);
@@ -104,7 +105,7 @@ const ListaTransakcji = ({ onAdd}) => {
                 <th className="p-3 text-left">Ilość</th>
                 <th className="p-3 text-left">Kwota</th>
                 <th className="p-3 text-left">Sposób płatności</th>
-                <th className="p-3 text-center">Nr. Pracownika</th>
+                <th className="p-3 text-center">Nr pracownika</th>
                 <th className="p-3 text-center">Akcje</th>
               </tr>
             </thead>

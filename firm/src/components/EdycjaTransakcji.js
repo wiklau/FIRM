@@ -91,7 +91,7 @@ const EdycjaTransakcji = () => {
   };
 
   const handleCancel = () => {
-    navigate('/transkacje');
+    navigate('/transakcje');
   }
 
   const handleInputChange = (event) => {

@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import lupaIcon from "../icons/lupa.jpg";
 import profilIcon from "../icons/profil.png";
 import axios from 'axios';
 
@@ -61,15 +60,6 @@ const Navbar = ({ setToken }) => {
     <div className="flex items-center justify-between bg-gray-300 p-7 h-16 top-0 relative">
       <div className="flex items-center flex-shrink-0 text-black mr-6">
         <Link to="/" className="text-2xl font-customFont font-bold tracking-wide">FIRMTRACKER</Link>
-      </div>
-      <div className="relative flex justify-center w-1/3">
-        <input
-          type="text"
-          className="px-4 py-2 rounded-full border border-black focus:outline-none focus:border-indigo-500 w-full"
-        />
-        <div className="absolute right-0 top-1/2 transform -translate-y-1/2">
-          <img src={lupaIcon} alt="Lupa" className="w-8 h-8 mr-2" />
-        </div>
       </div>
       <div className="relative flex items-center">
         <img
