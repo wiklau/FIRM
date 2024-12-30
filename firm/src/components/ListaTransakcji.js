@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import editIcon from '../icons/edit.png';
-import koszIcon from '../icons/kosz.png';
+//import editIcon from '../icons/edit.png';
+//import koszIcon from '../icons/kosz.png';
+import {ReactComponent as EditIcon} from '../icons/edit.svg';
+import {ReactComponent as KoszIcon} from '../icons/delete.svg';
 import { useNavigate } from 'react-router-dom';
 
 
@@ -89,7 +91,7 @@ const ListaTransakcji = ({ onAdd}) => {
   return (
     <div>
       <div className="flex items-center justify-between py-6 px-8 bg-gradient-to-r from-blue-500 to-teal-500 rounded-xl shadow-md mb-6">
-        <h1 className="text-white text-4xl font-semibold">Lista Transakcji</h1>
+        <h1 className="text-white text-4xl font-semibold">Lista transakcji</h1>
         <button onClick={onAdd} className="bg-gradient-to-r from-green-500 to-green-700 text-white py-2 px-4 rounded-lg hover:from-green-600 hover:to-green-800 transition">
           Dodaj Transakcję
         </button>
@@ -104,14 +106,14 @@ const ListaTransakcji = ({ onAdd}) => {
                 <th className="p-3 text-left">Produkt</th>
                 <th className="p-3 text-left">Ilość</th>
                 <th className="p-3 text-left">Kwota</th>
-                <th className="p-3 text-left">Sposób płatności</th>
+                <th className="p-3 text-left">Metoda płatności</th>
                 <th className="p-3 text-center">Nr pracownika</th>
                 <th className="p-3 text-center">Akcje</th>
               </tr>
             </thead>
             <tbody className="text-gray-600">
               {transactions.map(transaction => (
-                <tr key={transaction.id} className="hover:bg-gray-50 transition-colors">
+                <tr key={transaction.id} className="group hover:bg-gray-100 transition-colors">
                   <td className="p-3">{transaction.id}</td>
                   <td className="p-3">{formatDate(transaction.date)}</td>
                   <td className="p-3">
@@ -128,20 +130,22 @@ const ListaTransakcji = ({ onAdd}) => {
                   <td className="p-3">{transaction.paymentType}</td>
                   <td className="p-3 text-center">{transaction.employeeId}</td>
                   <td className="p-3 flex justify-center space-x-2">
+                  <div className="flex space-x-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                     <button
                       onClick={() => handleEditTransaction(transaction.id)}
-                      className="bg-gradient-to-r from-blue-500 to-blue-700 text-white py-2 px-4 rounded-lg hover:from-blue-600 hover:to-blue-800 transition"
+                      //className="bg-gradient-to-r from-blue-500 to-blue-700 text-white py-2 px-4 rounded-lg hover:from-blue-600 hover:to-blue-800 transition"
+                      className="text-blue-500 hover:bg-blue-200 active:bg-blue-300 focus:outline-none p-2 rounded-full transition-colors"
                     >
-                      <img src={editIcon} alt="Edytuj" className="inline w-5 mr-2" />
-                      Edytuj
+                      <EditIcon className = "w-5 h-5"/>
                     </button>
                     <button
                       onClick={() => openDeleteConfirmation(transaction.id)}
-                      className="bg-gradient-to-r from-red-500 to-red-700 text-white py-2 px-4 rounded-lg hover:from-red-600 hover:to-red-800 transition"
+                      //className="bg-gradient-to-r from-red-500 to-red-700 text-white py-2 px-4 rounded-lg hover:from-red-600 hover:to-red-800 transition"
+                      className="text-red-500 hover:bg-red-200 active:bg-red-300 focus:outline-none p-2 rounded-full transition-colors"
                     >
-                      <img src={koszIcon} alt="Usuń" className="inline w-5 mr-2" />
-                      Usuń
+                      <KoszIcon className = "w-5 h-5"/>
                     </button>
+                    </div>
                   </td>
                 </tr>
               ))}

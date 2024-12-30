@@ -47,6 +47,7 @@ const App = () => {
           )}
           <div className="w-3/4">
             <Routes>
+            <Route path="/*" element={token ? <Navigate to="/transakcje" /> : <Navigate to="/login" />} />
               <Route path="/" element={token ? <Navigate to="/transakcje" /> : <Navigate to="/login" />} />
               <Route path="/login" element={token ? <Navigate to="/transakcje" /> : <Login setToken={setToken} />} />
               <Route path="/transakcje" element={token ? <ZarzadzanieTransakcjami /> : <Navigate to="/login" />} />
