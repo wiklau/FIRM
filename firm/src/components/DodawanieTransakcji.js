@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Select from 'react-select';
+import {ReactComponent as MinusIcon} from "../icons/minus-icon.svg"
+import DatePicker from './DatePicker';
 
 const DodawanieTransakcji = () => {
   const [error, setError] = useState(null);
@@ -10,7 +12,7 @@ const DodawanieTransakcji = () => {
     date: '',
     employeeId: '',
     paymentType: '',
-    discount: '',
+    discount: 0,
     description: '',
     transactionProducts: [
       {
@@ -62,6 +64,7 @@ const DodawanieTransakcji = () => {
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setNewTransaction({ ...newTransaction, [name]: value });
+    console.log(`po: ${name}, ${value}`)
   };
   const handleCancel = () => {
     navigate('/transakcje');
@@ -158,90 +161,157 @@ const DodawanieTransakcji = () => {
   return (
     <div className="bg-white p-8 rounded-lg shadow-lg max-w-4xl mx-auto mt-6">
       <h2 className="text-2xl font-bold mb-6 text-gray-800">Dodaj nową transakcję</h2>
-  
+
       {error && <p className="text-red-500 mb-4">{error}</p>}
-  
-      <input
+      <div className="mb-4 flex items-center space-x-4">
+      <div>
+        <label className="block mb-2 text-gray-700 font-medium">Data transakcji</label>
+        <DatePicker
+          value={newTransaction.date}
+          onChange={handleInputChange}
+          name="date"
+          className="flex-1 mb-4 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          maxDate="2099-12-31T23:59"
+        />
+        </div>
+      
+        <div>
+        <label className="block mb-2 text-gray-700 font-medium">Nr pracownika</label>
+          <input
+          type="number"
+          name="employeeId"
+          value={newTransaction.employeeId}
+          onChange={handleInputChange}
+          placeholder="Nr pracownika"
+          className="flex mb-4 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+        </div>
+
+        
+      </div>
+
+      {/*<input
         type="datetime-local"
         name="date"
         value={newTransaction.date}
         onChange={handleInputChange}
         placeholder="Data"
         className="block w-full mb-4 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-      />
-  
-      <input
-        type="number"
-        name="employeeId"
-        value={newTransaction.employeeId}
-        onChange={handleInputChange}
-        placeholder="Nr. Pracownika"
-        className="block w-full mb-4 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-      />
-  
-      {isLoading ? (
-        <div className="text-center">Ładowanie produktów...</div>
-      ) : (
-        <>
-          {newTransaction.transactionProducts.map((product, index) => (
-            <div key={index} className="mb-4">
-              <Select
-                name={`productName-${index}`}
-                value={products.find(option => option.value === product.productID)}
-                onChange={(selectedOption) => handleProductChange(index, selectedOption)}
-                options={products}
-                className="block w-full mb-2"
-                placeholder="Wybierz produkt..."
-              />
-              <input
-                type="number"
-                name={`quantity-${index}`}
-                value={product.quantity}
-                onChange={(e) => {
-                  const updatedTransactionProducts = [...newTransaction.transactionProducts];
-                  updatedTransactionProducts[index].quantity = e.target.value;
-                  setNewTransaction({ ...newTransaction, transactionProducts: updatedTransactionProducts });
-                }}
-                placeholder="Ilość"
-                className="block w-full mb-2 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-              <button
+      />*/}
+      <label className="block mb-2 text-gray-700 font-medium">Produkty transakcji</label>
+      <div className="border border-gray-300 rounded-lg shadow-sm p-4 h-80 overflow-y-scroll">
+        {isLoading ? (
+          <div className="text-center">Ładowanie produktów...</div>
+        ) : (
+          <>
+            {newTransaction.transactionProducts.map((product, index) => (
+              <div key={index} className="mb-4 flex items-center space-x-4">
+                <Select
+                  name={`productName-${index}`}
+                  value={products.find(option => option.value === product.productID)}
+                  onChange={(selectedOption) => handleProductChange(index, selectedOption)}
+                  options={products}
+                  className="flex-1"
+                  placeholder="Wybierz produkt..."
+                />
+                <input
+                  type="number"
+                  name={`quantity-${index}`}
+                  value={product.quantity}
+                  onChange={(e) => {
+                    const updatedTransactionProducts = [...newTransaction.transactionProducts];
+                    updatedTransactionProducts[index].quantity = e.target.value;
+                    setNewTransaction({ ...newTransaction, transactionProducts: updatedTransactionProducts });
+                  }}
+                  placeholder="Ilość"
+                  className="w-24 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                {/*<button
                 onClick={() => handleRemoveProduct(index)}
                 className="bg-gradient-to-r from-red-500 to-red-700 text-white py-2 px-4 rounded-lg hover:from-red-600 hover:to-red-800 transition"
               >
                 Usuń
-              </button>
-            </div>
-          ))}
-        </>
-      )}
-  
-      <button
-        onClick={handleAddProduct}
-        className="bg-gradient-to-r from-blue-500 to-blue-700 text-white py-2 px-4 rounded-lg hover:from-blue-600 hover:to-blue-800 transition mb-3"
-      >
-        Dodaj produkt
-      </button>
-  
-      <input
+              </button>*/}
+                <button
+                  onClick={handleRemoveProduct}
+                  className="relative flex items-center justify-center w-10 h-10 rounded-full text-gray-500 hover:text-red-600 hover:bg-red-100 active:bg-red-200 transition focus:outline-none"
+                >
+                  <MinusIcon className="w-5 h-5" />
+                </button>
+              </div>
+            ))}
+          </>
+        )}
+
+        <button
+          onClick={handleAddProduct}
+          className="bg-gradient-to-r from-blue-500 to-blue-700 text-white py-2 px-4 rounded-lg hover:from-blue-600 hover:to-blue-800 transition mb-3"
+        >
+          Dodaj produkt
+        </button>
+      </div>
+      {/*<input
         type="text"
         name="paymentType"
         value={newTransaction.paymentType}
         onChange={handleInputChange}
         placeholder="Sposób płatności"
         className="block w-full mb-4 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-      />
-  
-      <input
-        type="number"
-        name="discount"
-        value={newTransaction.discount}
-        onChange={handleInputChange}
-        placeholder="Rabat"
-        className="block w-full mb-4 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-      />
-  
-      <input
+      />*/}
+      <div className="mt-6 flex justify-between">
+        <div className="mb-4">
+          <label className="block mb-2 text-gray-700 font-medium">Metoda płatności</label>
+          <div className="flex space-x-4">
+            <label className="flex items-center">
+              <input
+                type="radio"
+                name="paymentType"
+                value="BLIK"
+                checked={newTransaction.paymentType === "BLIK"}
+                onChange={handleInputChange}
+                className="form-radio h-5 w-5 text-blue-500 focus:ring-blue-500"
+              />
+              <span className="ml-2">BLIK</span>
+            </label>
+            <label className="flex items-center">
+              <input
+                type="radio"
+                name="paymentType"
+                value="Gotówka"
+                checked={newTransaction.paymentType === "Gotówka"}
+                onChange={handleInputChange}
+                className="form-radio h-5 w-5 text-blue-500 focus:ring-blue-500"
+              />
+              <span className="ml-2">Gotówka</span>
+            </label>
+            <label className="flex items-center">
+              <input
+                type="radio"
+                name="paymentType"
+                value="Karta płatnicza"
+                checked={newTransaction.paymentType === "Karta płatnicza"}
+                onChange={handleInputChange}
+                className="form-radio h-5 w-5 text-blue-500 focus:ring-blue-500"
+              />
+              <span className="ml-2">Karta płatnicza</span>
+            </label>
+          </div>
+        </div>
+        <div className="">
+          <label className="block mb-2 text-gray-700 font-medium">Rabat</label>
+        <input
+          type="number"
+          name="discount"
+          value={newTransaction.discount}
+          onChange={handleInputChange}
+          placeholder="Rabat"
+          className="block w-full mb-4 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+        /></div>
+        
+      </div>
+  <div>
+  <label className="block mb-2 text-gray-700 font-medium">Opis</label>      
+    <input
         type="text"
         name="description"
         value={newTransaction.description}
@@ -249,6 +319,8 @@ const DodawanieTransakcji = () => {
         placeholder="Opis"
         className="block w-full mb-4 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
+      </div>
+
   
       <div className="mt-6 flex justify-between">
         <button
