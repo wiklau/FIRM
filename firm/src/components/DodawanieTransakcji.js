@@ -190,14 +190,6 @@ const DodawanieTransakcji = () => {
         
       </div>
 
-      {/*<input
-        type="datetime-local"
-        name="date"
-        value={newTransaction.date}
-        onChange={handleInputChange}
-        placeholder="Data"
-        className="block w-full mb-4 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-      />*/}
       <label className="block mb-2 text-gray-700 font-medium">Produkty transakcji</label>
       <div className="border border-gray-300 rounded-lg shadow-sm p-4 h-80 overflow-y-scroll">
         {isLoading ? (

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import koszIcon from "../icons/kosz.png";
+import {ReactComponent as KoszIcon} from '../icons/delete.svg';
 
 const Raporty = () => {
   const [fromDate, setFromDate] = useState('');
@@ -28,6 +28,31 @@ const Raporty = () => {
     }
   };
 
+  const validateYear = (dateString) => {
+    const year = dateString.split('-')[0];
+    return year.length === 4 && /^\d{4}$/.test(year);
+  };
+  
+  const handleFromDateChange = (e) => {
+    const value = e.target.value;
+    if (validateYear(value)) {
+      setFromDate(value);
+      setError(null);
+    } else {
+      setError('Rok w dacie "Od" musi być 4-cyfrowy.');
+    }
+  };
+  
+  const handleToDateChange = (e) => {
+    const value = e.target.value;
+    if (validateYear(value)) {
+      setToDate(value);
+      setError(null);
+    } else {
+      setError('Rok w dacie "Do" musi być 4-cyfrowy.');
+    }
+  };
+  
   const openDeleteConfirmation = (reportId) => {
     setDeleteReportId(reportId);
     setShowDeleteModal(true);
@@ -110,18 +135,18 @@ const Raporty = () => {
               type="datetime-local"
               id="fromDate"
               value={fromDate}
-              onChange={(e) => setFromDate(e.target.value)}
+              onChange={handleFromDateChange}              
               className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
-          
+
           <div className="flex-1">
             <label htmlFor="toDate" className="block text-lg font-medium text-gray-700 mb-2">Do:</label>
             <input
               type="datetime-local"
               id="toDate"
               value={toDate}
-              onChange={(e) => setToDate(e.target.value)}
+              onChange={handleToDateChange}              
               className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
@@ -133,7 +158,14 @@ const Raporty = () => {
         >
           Generuj raport
         </button>
+
+        {error && (
+          <div className="mt-4 text-red-500 text-center font-semibold">
+            {error}
+          </div>
+        )}
       </div>
+
 
 
 
@@ -147,46 +179,33 @@ const Raporty = () => {
               <th className="p-2 text-left">Suma dochodów</th>
               <th className="p-2 text-left">Suma wydatków</th>
               <th className="p-2 text-left">Bilans</th>
-              <th className="p-2 text-center"></th>
+              <th className="p-2 text-center">Usuń</th>
             </tr>
           </thead>
           <tbody>
             {reports.map((report) => (
-              <tr key={report.id} className="hover:bg-gray-50">
+              <tr key={report.id} className="group hover:bg-gray-100 transition-colors">
                 <td className="p-2">{report.id}</td>
                 <td className="p-2">{formatDate(report.fromDate)}</td>
                 <td className="p-2">{formatDate(report.toDate)}</td>
                 <td className="p-2">{report.totalIncome}</td>
                 <td className="p-2">{report.totalExpenses}</td>
                 <td className="p-2">{report.totalBalance}</td>
-                <td className="p-2 text-center">
-                  <button
-                    onClick={() => openDeleteConfirmation(report.id)}
-                    className="bg-gradient-to-r from-red-500 to-red-700 text-white py-2 px-4 rounded-lg hover:from-red-600 hover:to-red-800 transition"
-                  >
-                    <img src={koszIcon} alt="Usuń" className="inline w-5 mr-2" /> Usuń
-                  </button>
-                </td>
+                <td className="p-3 flex justify-center space-x-2">
+                  <div className="flex space-x-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                    <button
+                      onClick={() => openDeleteConfirmation(report.id)}
+                      className="text-red-500 hover:bg-red-200 active:bg-red-300 focus:outline-none p-2 rounded-full transition-colors"
+                    >
+                      <KoszIcon className = "w-5 h-5"/>
+                    </button>
+                    </div>
+                  </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
-
-      {error && (
-        <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center">
-          <div className="bg-white p-8 rounded-lg">
-            <h2 className="text-2xl font-bold mb-4">Błąd</h2>
-            <p>{error}</p>
-            <button
-              onClick={() => window.location.reload()}
-              className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg"
-            >
-              Zamknij
-            </button>
-          </div>
-        </div>
-      )}
 
       {showDeleteModal && (
         <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50">

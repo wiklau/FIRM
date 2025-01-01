@@ -12,7 +12,6 @@ const PanelAdministratora = () => {
   const [workdays, setWorkdays] = useState([]);
   const [absenceType, setAbsenceType] = useState('');
 
-  // Funkcja pobierania emaili
   const fetchEmails = async () => {
     try {
       const response = await axios.get('https://localhost:7039/api/user/emails', {
@@ -24,7 +23,6 @@ const PanelAdministratora = () => {
     }
   };
 
-  // Funkcja dodawania absencji
   const addAbsence = async () => {
     if (!selectedEmail || !absenceType || !startDate || !endDate) {
       alert("Wszystkie pola muszą być wypełnione!");
@@ -47,7 +45,6 @@ const PanelAdministratora = () => {
     }
   };
 
-  // Funkcja pobierania raportu
   const downloadReport = async () => {
     if (!reportType || !startDate || !endDate) {
       alert("Wszystkie pola muszą być wypełnione!");
@@ -76,7 +73,6 @@ const PanelAdministratora = () => {
     }
   };
 
-  // Funkcja pobierania harmonogramów
   const fetchWorkdays = async (userEmail) => {
     if (!userEmail) {
       setWorkdays([]); 
@@ -93,7 +89,6 @@ const PanelAdministratora = () => {
     }
   };
 
-  // UseEffect do pobierania danych emaili przy pierwszym renderowaniu
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
@@ -101,7 +96,6 @@ const PanelAdministratora = () => {
     }
   }, []);
 
-  // UseEffect do pobierania harmonogramu przy zmianie emaila
   useEffect(() => {
     if (selectedEmail) {
       fetchWorkdays(selectedEmail);
@@ -113,7 +107,7 @@ const PanelAdministratora = () => {
       <div className='flex items-center justify-between py-6 px-8 bg-gradient-to-r from-blue-500 to-teal-500 rounded-xl shadow-md mb-6'>
         <h1 className="text-white text-4xl font-semibold">Panel Administratora</h1>
         <div className="mr-10 text-lg flex">
-          <div className='px-10'>
+          <div className='px-5'>
             <button 
               onClick={() => setSelectedOption('harmonogramy')} 
               className={`
@@ -123,7 +117,7 @@ const PanelAdministratora = () => {
               Harmonogramy
             </button>
           </div>
-          <div className='px-10'>
+          <div className='px-5'>
             <button 
               onClick={() => setSelectedOption('absencje')} 
               className={`
@@ -133,7 +127,7 @@ const PanelAdministratora = () => {
               Absencje
             </button>
           </div>
-          <div>
+          <div className='px-5'>
             <button 
               onClick={() => setSelectedOption('raporty')} 
               className={`

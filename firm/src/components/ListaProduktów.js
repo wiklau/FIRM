@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import editIcon from '../icons/edit.png';
-import koszIcon from '../icons/kosz.png';
+import {ReactComponent as EditIcon} from '../icons/edit.svg';
+import {ReactComponent as KoszIcon} from '../icons/delete.svg';
 import { useNavigate } from 'react-router-dom';
 
 const ListaProduktow = ({ onAdd }) => {
@@ -25,6 +25,11 @@ const ListaProduktow = ({ onAdd }) => {
   useEffect(() => {
     fetchProducts();
   }, []);
+
+  const openDeleteConfirmation = (productId) => {
+    setDeleteProductId(productId);
+    setShowModal(true);
+  };
 
   const handleDeleteProduct = async () => {
     const token = localStorage.getItem('token');
@@ -76,7 +81,7 @@ const ListaProduktow = ({ onAdd }) => {
           </thead>
           <tbody className="text-gray-600">
             {products.map((product) => (
-              <tr key={product.id} className="hover:bg-gray-50 transition-colors">
+              <tr key={product.id} className="group hover:bg-gray-100 transition-colors">
                 <td className="p-3">{product.id}</td>
                 <td className="p-3">{product.name}</td>
                 <td className="p-3">{product.description}</td>
@@ -84,25 +89,20 @@ const ListaProduktow = ({ onAdd }) => {
                 <td className="p-3 text-center">
                   {product.type === 0 ? "" : product.availability}
                 </td>
-                <td className="p-3 flex justify-center items-center space-x-2">
-                  <button
-                    onClick={() => handleEditProduct(product.id)}
-                    className="bg-gradient-to-r from-blue-500 to-blue-700 text-white py-2 px-4 rounded-lg hover:from-blue-600 hover:to-blue-800 transition"
-                  >
-                    <img src={editIcon} alt="Edytuj" className="inline w-5 mr-2" />
-                    Edytuj
-                  </button>
-                  <button
-                    onClick={() => {
-                      setDeleteProductId(product.id);
-                      setShowModal(true);
-                    }}
-                    className="bg-gradient-to-r from-red-500 to-red-700 text-white py-2 px-4 rounded-lg hover:from-red-600 hover:to-red-800 transition"
-                  >
-                    <img src={koszIcon} alt="Usuń" className="inline w-5 mr-2" />
-                    Usuń
-                  </button>
-                </td>
+                <div className="flex justify-center items-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                    <button
+                      onClick={() => handleEditProduct(product.id)}
+                      className="text-blue-500 hover:bg-blue-200 active:bg-blue-300 focus:outline-none p-2 rounded-full transition-colors"
+                    >
+                      <EditIcon className = "w-5 h-5"/>
+                    </button>
+                    <button
+                      onClick={() => openDeleteConfirmation(product.id)}
+                      className="text-red-500 hover:bg-red-200 active:bg-red-300 focus:outline-none p-2 rounded-full transition-colors"
+                    >
+                      <KoszIcon className = "w-5 h-5"/>
+                    </button>
+                  </div>
               </tr>
               ))}
             </tbody>

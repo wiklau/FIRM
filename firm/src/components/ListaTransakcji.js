@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-//import editIcon from '../icons/edit.png';
-//import koszIcon from '../icons/kosz.png';
 import {ReactComponent as EditIcon} from '../icons/edit.svg';
 import {ReactComponent as KoszIcon} from '../icons/delete.svg';
 import { useNavigate } from 'react-router-dom';
@@ -133,14 +131,12 @@ const ListaTransakcji = ({ onAdd}) => {
                   <div className="flex space-x-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                     <button
                       onClick={() => handleEditTransaction(transaction.id)}
-                      //className="bg-gradient-to-r from-blue-500 to-blue-700 text-white py-2 px-4 rounded-lg hover:from-blue-600 hover:to-blue-800 transition"
                       className="text-blue-500 hover:bg-blue-200 active:bg-blue-300 focus:outline-none p-2 rounded-full transition-colors"
                     >
                       <EditIcon className = "w-5 h-5"/>
                     </button>
                     <button
                       onClick={() => openDeleteConfirmation(transaction.id)}
-                      //className="bg-gradient-to-r from-red-500 to-red-700 text-white py-2 px-4 rounded-lg hover:from-red-600 hover:to-red-800 transition"
                       className="text-red-500 hover:bg-red-200 active:bg-red-300 focus:outline-none p-2 rounded-full transition-colors"
                     >
                       <KoszIcon className = "w-5 h-5"/>
