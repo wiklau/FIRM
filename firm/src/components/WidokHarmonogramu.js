@@ -2,17 +2,15 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 const WidokHarmonogramu = ({ workdays }) => {
-  const [currentDate, setCurrentDate] = useState(new Date());
   const [displayDate, setDisplayDate] = useState(new Date());
   const [daysInMonth, setDaysInMonth] = useState([]);
   const [manualDateChange, setManualDateChange] = useState(false);
-  const [isWorking, setIsWorking] = useState(false);
   const [selectedDay, setSelectedDay] = useState(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     generateDaysInMonth();
-  }, [displayDate, workdays]);
+  }, [workdays]);
 
   const generateDaysInMonth = () => {
     const firstDayOfMonth = new Date(displayDate.getFullYear(), displayDate.getMonth(), 1);

@@ -8,7 +8,7 @@ const ListaProduktow = ({ onAdd }) => {
   const [products, setProducts] = useState([]);
   const [deleteProductId, setDeleteProductId] = useState(null);
   const [showModal, setShowModal] = useState(false);
-  const [deleteError, setDeleteError] = useState(false);
+  const [deleteError, setDeleteError] = useState(null);
   const navigate = useNavigate();
 
   const fetchProducts = async () => {
@@ -19,7 +19,6 @@ const ListaProduktow = ({ onAdd }) => {
       });
       setProducts(response.data);
     } catch (error) {
-      setDeleteError(true);
       console.error('Błąd podczas pobierania produktów:', error);
     }
   };
@@ -54,7 +53,7 @@ const ListaProduktow = ({ onAdd }) => {
       setDeleteProductId(null);
     } catch (error) {
       setShowModal(false);
-      setDeleteError(true);
+      setDeleteError(error.response?.data || 'Nieznany błąd');
       console.error('Błąd podczas usuwania produktu:', error);
     }
   };
@@ -94,27 +93,26 @@ const ListaProduktow = ({ onAdd }) => {
                   {product.type === 0 ? "" : product.availability}
                 </td>
                 <td className="p-3 flex justify-center space-x-2">
-                <div className="flex justify-center items-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                  <div className="flex justify-center items-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                     <button
                       onClick={() => handleEditProduct(product.id)}
                       className="text-blue-500 hover:bg-blue-200 active:bg-blue-300 focus:outline-none p-2 rounded-full transition-colors"
                     >
-                      <EditIcon className = "w-5 h-5"/>
+                      <EditIcon className="w-5 h-5" />
                     </button>
                     <button
                       onClick={() => openDeleteConfirmation(product.id)}
                       className="text-red-500 hover:bg-red-200 active:bg-red-300 focus:outline-none p-2 rounded-full transition-colors"
                     >
-                      <KoszIcon className = "w-5 h-5"/>
+                      <KoszIcon className="w-5 h-5" />
                     </button>
                   </div>
-                  </td>
+                </td>
               </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
+            ))}
+          </tbody>
+        </table>
+      </div>
 
       {showModal && (
         <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50">
@@ -137,19 +135,19 @@ const ListaProduktow = ({ onAdd }) => {
           </div>
         </div>
       )}
-       {deleteError && (
+      {deleteError && (
         <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50">
           <div className="bg-white p-6 rounded-md shadow-lg w-96">
             <h2 className="text-lg font-bold mb-4">Usuwanie produktu nie powiodło się.</h2>
-            {/*<p>Tu będzie komunikat z api</p>*/}
-              <button
-                onClick={() => setDeleteError(false)}
-                className="bg-gray-500 text-white py-2 px-4 rounded"
-              >
-                Wróć
-              </button>
-            </div>
+            <p className="text-red-500">{deleteError}</p>
+            <button
+              onClick={() => setDeleteError(null)}
+              className="bg-gray-500 text-white py-2 px-4 rounded"
+            >
+              Wróć
+            </button>
           </div>
+        </div>
       )}
     </div>
   );

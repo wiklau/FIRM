@@ -9,6 +9,7 @@ const ListaTransakcji = ({ onAdd}) => {
   const [transactions, setTransactions] = useState([]);
   const [deleteTransactionId, setDeleteTransactionId] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [deleteError, setDeleteError] = useState(null);
   const navigate = useNavigate();
 
   const fetchTransactions = async () => {
@@ -72,8 +73,9 @@ const ListaTransakcji = ({ onAdd}) => {
       setShowModal(false);
       setDeleteTransactionId(null);
     } catch (error) {
-      console.error('Błąd podczas usuwania transakcji:', error);
-    }
+      setShowModal(false);
+      setDeleteError(error.response?.data || 'Nieznany błąd');
+      console.error('Błąd podczas usuwania produktu:', error);}
   };
 
   const openDeleteConfirmation = (transactionId) => {
@@ -150,7 +152,10 @@ const ListaTransakcji = ({ onAdd}) => {
             <h2 className="text-lg font-bold mb-4">Czy na pewno chcesz usunąć tę transakcję?</h2>
             <div className="flex justify-between">
               <button
-                onClick={handleDeleteTransaction}
+                onClick={() => {
+                  handleDeleteTransaction();
+                  setShowModal(false);
+                }}
                 className="bg-red-500 text-white py-2 px-4 rounded"
               >
                 Tak
@@ -162,6 +167,20 @@ const ListaTransakcji = ({ onAdd}) => {
                 Anuluj
               </button>
             </div>
+          </div>
+        </div>
+      )}
+      {deleteError && (
+        <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white p-6 rounded-md shadow-lg w-96">
+            <h2 className="text-lg font-bold mb-4">Usuwanie transakcji nie powiodło się.</h2>
+            <p className="text-red-500">{deleteError}</p>
+            <button
+              onClick={() => setDeleteError(null)}
+              className="bg-gray-500 text-white py-2 px-4 rounded"
+            >
+              Wróć
+            </button>
           </div>
         </div>
       )}

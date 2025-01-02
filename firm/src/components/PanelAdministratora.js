@@ -12,6 +12,51 @@ const PanelAdministratora = () => {
   const [selectedEmail, setSelectedEmail] = useState('');
   const [workdays, setWorkdays] = useState([]);
   const [absenceType, setAbsenceType] = useState('');
+  const [userEmail, setUserEmail] = useState('');
+  const [userPassword, setUserPassword] = useState('');
+  const [userRole, setUserRole] = useState('');
+  const [changePasswordEmail, setChangePasswordEmail] = useState('');
+  const [changePasswordValue, setChangePasswordValue] = useState('');
+  const [errors, setErrors] = useState({});
+
+  const validateInputs = () => {
+    const newErrors = {};
+    if (!userEmail) newErrors.email = "Pole email jest wymagane.";
+    if (!userPassword) newErrors.password = "Pole hasło jest wymagane.";
+    if (!userRole) newErrors.role = "Wybór roli jest wymagany.";
+    return newErrors;
+  };
+
+  const addUser = async () => {
+    const validationErrors = validateInputs();
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return;
+    }
+    setErrors({});
+
+    try {
+      await axios.post(
+        "https://localhost:7039/api/user/create",
+        {
+          login: userEmail,
+          email: userEmail,
+          password: userPassword,
+          role: userRole,
+          newEncryption: true,
+        },
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        }
+      );
+      setUserEmail("");
+      setUserPassword("");
+      setUserRole("");
+    } catch (error) {
+      console.error("Błąd podczas tworzenia konta:", error);
+    }
+  };
+
 
   const fetchEmails = async () => {
     try {
@@ -21,6 +66,32 @@ const PanelAdministratora = () => {
       setEmails(response.data);
     } catch (error) {
       console.error('Błąd podczas pobierania emaili:', error);
+    }
+  };
+
+
+  const changePassword = async () => {
+    if (!changePasswordEmail || !changePasswordValue) {
+      alert("Wszystkie pola muszą być wypełnione!");
+      return;
+    }
+  
+    try {
+      await axios.post(
+        'https://localhost:7039/api/user/ChangeUserPassword',
+        {
+          email: changePasswordEmail,
+          password: changePasswordValue,
+        },
+        {
+          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+        }
+      );
+  
+      setChangePasswordEmail('');
+      setChangePasswordValue('');
+    } catch (error) {
+      console.error('Błąd podczas zmiany hasła:', error);
     }
   };
 
@@ -136,6 +207,26 @@ const PanelAdministratora = () => {
                 hover:text-white hover:bg-indigo-600 hover:rounded-lg transition duration-300 ease-in-out
               `}>
               Raporty
+            </button>
+          </div>
+          <div className='px-5'>
+            <button 
+              onClick={() => setSelectedOption('konta')} 
+              className={`
+                ${selectedOption === 'konta' ? 'text-white font-bold' : 'text-gray-200'}
+                hover:text-white hover:bg-indigo-600 hover:rounded-lg transition duration-300 ease-in-out
+              `}>
+              Konta
+            </button>
+          </div>
+          <div className='px-5'>
+            <button 
+              onClick={() => setSelectedOption('hasła')} 
+              className={`
+                ${selectedOption === 'hasła' ? 'text-white font-bold' : 'text-gray-200'}
+                hover:text-white hover:bg-indigo-600 hover:rounded-lg transition duration-300 ease-in-out
+              `}>
+              Hasła
             </button>
           </div>
         </div>
@@ -296,6 +387,131 @@ const PanelAdministratora = () => {
           </div>
         </div>
 
+      )}
+    {selectedOption === 'konta' && (
+      <div className="flex justify-center items-start pt-10">
+        <div className="bg-white p-8 rounded-xl shadow-lg w-full max-w-md">
+          <div className="mb-6">
+            <h2 className="text-2xl font-semibold text-center mb-4">Dodaj konto</h2>
+
+            <div className="mb-4">
+            <label htmlFor="email" className="block text-lg font-medium text-gray-700 mb-2">
+              Email:
+            </label>
+            <input
+              type="email"
+              id="email"
+              value={userEmail}
+              onChange={(e) => setUserEmail(e.target.value)}
+              className={`w-full p-3 border ${
+                errors.email ? "border-red-500" : "border-gray-300"
+              } rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500`}
+            />
+            {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
+          </div>
+
+          <div className="mb-4">
+            <label htmlFor="password" className="block text-lg font-medium text-gray-700 mb-2">
+              Hasło:
+            </label>
+            <input
+              type="password"
+              id="password"
+              value={userPassword}
+              onChange={(e) => setUserPassword(e.target.value)}
+              className={`w-full p-3 border ${
+                errors.password ? "border-red-500" : "border-gray-300"
+              } rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500`}
+            />
+            {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
+          </div>
+
+          <div className="mb-4">
+            <label htmlFor="role" className="block text-lg font-medium text-gray-700 mb-2">
+              Rola:
+            </label>
+            <div className="flex items-center space-x-4">
+              <label className="flex items-center space-x-2">
+                <input
+                  type="radio"
+                  name="role"
+                  value="user"
+                  checked={userRole === "user"}
+                  onChange={(e) => setUserRole(e.target.value)}
+                  className="form-radio text-blue-500 focus:ring-blue-500"
+                />
+                <span className="text-gray-700">User</span>
+              </label>
+              <label className="flex items-center space-x-2">
+                <input
+                  type="radio"
+                  name="role"
+                  value="admin"
+                  checked={userRole === "admin"}
+                  onChange={(e) => setUserRole(e.target.value)}
+                  className="form-radio text-blue-500 focus:ring-blue-500"
+                />
+                <span className="text-gray-700">Admin</span>
+              </label>
+            </div>
+            {errors.role && <p className="text-red-500 text-sm">{errors.role}</p>}
+          </div>
+
+
+
+            <button
+              onClick={addUser}
+              className="w-full bg-blue-500 text-white py-3 px-4 rounded-lg mt-4 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300"
+            >
+              Dodaj konto
+            </button>
+          </div>
+        </div>
+      </div>
+    )}
+      {selectedOption === 'hasła' && (
+        <div className="flex justify-center items-start pt-10">
+          <div className="bg-white p-8 rounded-xl shadow-lg w-full max-w-md">
+            <div className="mb-6">
+              <h2 className="text-2xl font-semibold text-center mb-4">Zmień hasło</h2>
+
+              <div className="mb-4">
+                <label htmlFor="email" className="block text-lg font-medium text-gray-700 mb-2">Wybierz email:</label>
+                <select 
+                  id="email"
+                  value={changePasswordEmail}
+                  onChange={(e) => setChangePasswordEmail(e.target.value)} 
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="">Wybierz...</option>
+                  {emails.map((email) => (
+                    <option key={email} value={email}>{email}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="mb-4">
+                <label htmlFor="changePasswordValue" className="block text-lg font-medium text-gray-700 mb-2">
+                  Nowe hasło:
+                </label>
+                <input
+                  type="password"
+                  id="changePasswordValue"
+                  value={changePasswordValue}
+                  onChange={(e) => setChangePasswordValue(e.target.value)}
+                  className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+
+              <button
+                onClick={changePassword}
+                className="w-full bg-blue-500 text-white py-3 px-4 rounded-lg mt-4 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300"
+              >
+                Zmień hasło
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
