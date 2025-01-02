@@ -27,7 +27,7 @@ const DatePicker = ({ value, onChange, name, className, minDate, maxDate }) => {
       <input
         type="datetime-local"
         name={name}
-        value={value || getCurrentDate()}
+        value={value}
         onChange={handleChange}
         className={className}
       />

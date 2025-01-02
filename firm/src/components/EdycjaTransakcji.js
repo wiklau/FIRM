@@ -3,6 +3,7 @@ import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 import {ReactComponent as MinusIcon} from "../icons/minus-icon.svg"
 import Select from "react-select";
+import DatePicker from './DatePicker';
 
 const EdycjaTransakcji = () => {
   const { id } = useParams();
@@ -212,12 +213,13 @@ const EdycjaTransakcji = () => {
       <div className="mb-4 flex items-center space-x-4">
         <div>
           <label className="block mb-2 text-gray-700 font-medium">Data transakcji</label>
-          <input
+          <DatePicker
             type="datetime-local"
             name="date"
             value={transaction.date}
             onChange={handleInputChange}
             className="flex-1 mb-4 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            maxDate="2099-12-31T23:59"
           />
           {errors.date && <span className="text-red-500 text-sm">{errors.date}</span>}
         </div>

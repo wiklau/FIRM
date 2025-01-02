@@ -66,7 +66,6 @@ const DodawanieTransakcji = () => {
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setNewTransaction({ ...newTransaction, [name]: value });
-    console.log(`po: ${name}, ${value}`)
   };
   const handleCancel = () => {
     navigate('/transakcje');
