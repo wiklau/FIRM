@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import WidokHarmonogramu from './WidokHarmonogramu';
+import DatePicker from './DatePicker';
 
 const PanelAdministratora = () => {
   const [selectedOption, setSelectedOption] = useState('harmonogramy');
@@ -164,23 +165,25 @@ const PanelAdministratora = () => {
 
               <div className="mb-4">
                 <label htmlFor="startDate" className="block text-lg font-medium text-gray-700 mb-2">Wybierz datę początkową:</label>
-                <input 
+                <DatePicker
                   type="datetime-local" 
                   id="startDate" 
                   value={startDate} 
                   onChange={(e) => setStartDate(e.target.value)} 
                   className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  maxDate="2099-12-31T23:59"
                 />
               </div>
 
               <div className="mb-6">
                 <label htmlFor="endDate" className="block text-lg font-medium text-gray-700 mb-2">Wybierz datę końcową:</label>
-                <input 
+                <DatePicker
                   type="datetime-local" 
                   id="endDate" 
                   value={endDate} 
                   onChange={(e) => setEndDate(e.target.value)} 
                   className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  maxDate="2099-12-31T23:59"
                 />
               </div>
 
@@ -261,23 +264,25 @@ const PanelAdministratora = () => {
 
               <div className="mb-4">
                 <label htmlFor="startDate" className="block text-lg font-medium text-gray-700 mb-2">Wybierz datę początkową:</label>
-                <input 
+                <DatePicker
                   type="datetime-local" 
                   id="startDate" 
                   value={startDate} 
                   onChange={(e) => setStartDate(e.target.value)} 
                   className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  maxDate="2099-12-31T23:59"
                 />
               </div>
 
               <div className="mb-6">
                 <label htmlFor="endDate" className="block text-lg font-medium text-gray-700 mb-2">Wybierz datę końcową:</label>
-                <input 
+                <DatePicker
                   type="datetime-local" 
                   id="endDate" 
                   value={endDate} 
                   onChange={(e) => setEndDate(e.target.value)} 
                   className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  maxDate="2099-12-31T23:59"
                 />
               </div>
 

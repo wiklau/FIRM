@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { ReactComponent as KoszIcon } from '../icons/delete.svg';
+import DatePicker from './DatePicker';
 
 const Wydatki = () => {
   const [expenses, setExpenses] = useState([]);
@@ -114,12 +115,13 @@ const Wydatki = () => {
             <div className="flex space-x-6">
               <div className="flex-1">
                 <label htmlFor="expenseDate" className="block text-sm font-medium text-gray-700">Data</label>
-                <input
+                <DatePicker
                   type="datetime-local"
                   id="expenseDate"
                   value={newExpense.date}
                   onChange={handleDateChange}
                   className="mt-1 py-2 px-3 block w-full shadow-md sm:text-sm rounded-lg border-gray-300 focus:ring-indigo-500 focus:border-indigo-500"
+                  maxDate="2099-12-31T23:59"
                 />
               </div>
 

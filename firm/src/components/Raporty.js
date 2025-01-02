@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import {ReactComponent as KoszIcon} from '../icons/delete.svg';
+import DatePicker from './DatePicker';
 
 const Raporty = () => {
   const [fromDate, setFromDate] = useState('');
@@ -131,23 +132,25 @@ const Raporty = () => {
         <div className="mb-6 flex items-center space-x-6">
           <div className="flex-1">
             <label htmlFor="fromDate" className="block text-lg font-medium text-gray-700 mb-2">Od:</label>
-            <input
+            <DatePicker
               type="datetime-local"
               id="fromDate"
               value={fromDate}
               onChange={handleFromDateChange}              
               className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              maxDate="2099-12-31T23:59"
             />
           </div>
 
           <div className="flex-1">
             <label htmlFor="toDate" className="block text-lg font-medium text-gray-700 mb-2">Do:</label>
-            <input
+            <DatePicker
               type="datetime-local"
               id="toDate"
               value={toDate}
               onChange={handleToDateChange}              
               className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              maxDate="2099-12-31T23:59"
             />
           </div>
         </div>
