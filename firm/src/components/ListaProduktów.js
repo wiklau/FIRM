@@ -8,6 +8,7 @@ const ListaProduktow = ({ onAdd }) => {
   const [products, setProducts] = useState([]);
   const [deleteProductId, setDeleteProductId] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [deleteError, setDeleteError] = useState(false);
   const navigate = useNavigate();
 
   const fetchProducts = async () => {
@@ -18,6 +19,7 @@ const ListaProduktow = ({ onAdd }) => {
       });
       setProducts(response.data);
     } catch (error) {
+      setDeleteError(true);
       console.error('Błąd podczas pobierania produktów:', error);
     }
   };
@@ -51,6 +53,8 @@ const ListaProduktow = ({ onAdd }) => {
       setShowModal(false);
       setDeleteProductId(null);
     } catch (error) {
+      setShowModal(false);
+      setDeleteError(true);
       console.error('Błąd podczas usuwania produktu:', error);
     }
   };
@@ -62,9 +66,9 @@ const ListaProduktow = ({ onAdd }) => {
   return (
     <div>
       <div className="flex items-center justify-between py-6 px-8 bg-gradient-to-r from-blue-500 to-teal-500 rounded-xl shadow-md mb-6">
-        <h1 className="text-white text-4xl font-semibold">Katalog Produktów oraz usług</h1>
+        <h1 className="text-white text-4xl font-semibold">Katalog produktów oraz usług</h1>
         <button onClick={onAdd} className="bg-gradient-to-r from-green-500 to-green-700 text-white py-2 px-4 rounded-lg hover:from-green-600 hover:to-green-800 transition">
-          Dodaj Produkt
+          Dodaj produkt
         </button>
       </div>
       <div className="mt-5">
@@ -89,6 +93,7 @@ const ListaProduktow = ({ onAdd }) => {
                 <td className="p-3 text-center">
                   {product.type === 0 ? "" : product.availability}
                 </td>
+                <td className="p-3 flex justify-center space-x-2">
                 <div className="flex justify-center items-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                     <button
                       onClick={() => handleEditProduct(product.id)}
@@ -103,6 +108,7 @@ const ListaProduktow = ({ onAdd }) => {
                       <KoszIcon className = "w-5 h-5"/>
                     </button>
                   </div>
+                  </td>
               </tr>
               ))}
             </tbody>
@@ -130,6 +136,20 @@ const ListaProduktow = ({ onAdd }) => {
             </div>
           </div>
         </div>
+      )}
+       {deleteError && (
+        <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white p-6 rounded-md shadow-lg w-96">
+            <h2 className="text-lg font-bold mb-4">Usuwanie produktu nie powiodło się.</h2>
+            {/*<p>Tu będzie komunikat z api</p>*/}
+              <button
+                onClick={() => setDeleteError(false)}
+                className="bg-gray-500 text-white py-2 px-4 rounded"
+              >
+                Wróć
+              </button>
+            </div>
+          </div>
       )}
     </div>
   );

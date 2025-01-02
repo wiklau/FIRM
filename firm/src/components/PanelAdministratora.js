@@ -30,7 +30,7 @@ const PanelAdministratora = () => {
     }
 
     try {
-      await axios.post('https://localhost:7039/api/Workday/user/absence/add', {
+      await axios.post('https://localhost:7039/api/Workday/absence/add', {
         userEmail: selectedEmail,
         absenceType: absenceType,
         startTime: startDate,
@@ -105,7 +105,7 @@ const PanelAdministratora = () => {
   return (
     <div className='p-10 ml-11'>
       <div className='flex items-center justify-between py-6 px-8 bg-gradient-to-r from-blue-500 to-teal-500 rounded-xl shadow-md mb-6'>
-        <h1 className="text-white text-4xl font-semibold">Panel Administratora</h1>
+        <h1 className="text-white text-4xl font-semibold">Panel administratora</h1>
         <div className="mr-10 text-lg flex">
           <div className='px-5'>
             <button 
@@ -146,7 +146,7 @@ const PanelAdministratora = () => {
         <div className="flex justify-center items-start pt-10">
           <div className="bg-white p-8 rounded-xl shadow-lg w-full max-w-md">
             <div className="mb-6">
-              <h2 className="text-2xl font-semibold text-center mb-4">Pobierz Raport</h2>
+              <h2 className="text-2xl font-semibold text-center mb-4">Pobierz raport</h2>
 
               <div className="mb-4">
                 <label htmlFor="reportType" className="block text-lg font-medium text-gray-700 mb-2">Wybierz typ raportu:</label>
@@ -188,7 +188,7 @@ const PanelAdministratora = () => {
                 onClick={downloadReport} 
                 className="w-full bg-blue-500 text-white py-3 px-4 rounded-lg mt-4 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300"
               >
-                Pobierz Raport
+                Pobierz raport
               </button>
             </div>
           </div>
@@ -228,7 +228,7 @@ const PanelAdministratora = () => {
         <div className="flex justify-center items-start pt-10">
           <div className="bg-white p-8 rounded-xl shadow-lg w-full max-w-md">
             <div className="mb-6">
-              <h2 className="text-2xl font-semibold text-center mb-4">Dodaj Absencję</h2>
+              <h2 className="text-2xl font-semibold text-center mb-4">Dodaj absencję</h2>
 
               <div className="mb-4">
                 <label htmlFor="email" className="block text-lg font-medium text-gray-700 mb-2">Wybierz email:</label>
@@ -285,7 +285,7 @@ const PanelAdministratora = () => {
                 onClick={addAbsence} 
                 className="w-full bg-blue-500 text-white py-3 px-4 rounded-lg mt-4 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300"
               >
-                Dodaj Absencję
+                Dodaj absencję
               </button>
             </div>
           </div>

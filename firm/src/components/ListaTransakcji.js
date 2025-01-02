@@ -91,7 +91,7 @@ const ListaTransakcji = ({ onAdd}) => {
       <div className="flex items-center justify-between py-6 px-8 bg-gradient-to-r from-blue-500 to-teal-500 rounded-xl shadow-md mb-6">
         <h1 className="text-white text-4xl font-semibold">Lista transakcji</h1>
         <button onClick={onAdd} className="bg-gradient-to-r from-green-500 to-green-700 text-white py-2 px-4 rounded-lg hover:from-green-600 hover:to-green-800 transition">
-          Dodaj Transakcję
+          Dodaj transakcję
         </button>
       </div>
       <div className="w-8/10 mx-auto mt-2">
@@ -101,8 +101,7 @@ const ListaTransakcji = ({ onAdd}) => {
               <tr>
                 <th className="p-3 text-left">ID</th>
                 <th className="p-3 text-left">Data</th>
-                <th className="p-3 text-left">Produkt</th>
-                <th className="p-3 text-left">Ilość</th>
+                <th className="p-3 text-left">Produkty</th>
                 <th className="p-3 text-left">Kwota</th>
                 <th className="p-3 text-left">Metoda płatności</th>
                 <th className="p-3 text-center">Nr pracownika</th>
@@ -114,16 +113,9 @@ const ListaTransakcji = ({ onAdd}) => {
                 <tr key={transaction.id} className="group hover:bg-gray-100 transition-colors">
                   <td className="p-3">{transaction.id}</td>
                   <td className="p-3">{formatDate(transaction.date)}</td>
-                  <td className="p-3">
-                    {transaction.transactionProducts.map(product => (
-                      <div key={product.id}>{product.product.name}</div>
-                    ))}
-                  </td>
-                  <td className="p-3">
-                    {transaction.transactionProducts.map(product => (
-                      <div key={product.id}>{product.quantity}</div>
-                    ))}
-                  </td>
+                  <td className="p-3 truncate max-w-xs" title={transaction.transactionProducts.map(product => product.product.name).join(', ')}>
+              {transaction.transactionProducts.map(product => product.product.name).join(', ')}
+            </td>
                   <td className="p-3">{formatPrice(transaction.totalPrice)}</td>
                   <td className="p-3">{transaction.paymentType}</td>
                   <td className="p-3 text-center">{transaction.employeeId}</td>

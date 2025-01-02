@@ -203,7 +203,7 @@ const Wydatki = () => {
             <h2 className="text-lg font-bold mb-4">Czy na pewno chcesz usunąć ten wydatek?</h2>
             <div className="flex justify-between">
               <button
-                onClick={() => { handleDeleteExpense(); setShowDeleteModal(false); }}
+                onClick={() => { handleDeleteExpense(); setShowDeleteModal(false); window.scrollTo({ top: 0 })  }}
                 className="bg-red-500 text-white py-2 px-4 rounded"
               >
                 Tak

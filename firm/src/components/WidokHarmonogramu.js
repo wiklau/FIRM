@@ -172,7 +172,7 @@ const WidokHarmonogramu = ({ workdays }) => {
           </div>
         </div>
 
-        <div className="w-1/3 bg-gray-100 p-4 rounded-lg">
+        <div className="w-1/3 bg-gray-100 p-4 rounded-lg h-[350px] border border-gray-300 rounded-lg shadow-sm p-4 h-80 overflow-y-scroll">
           {loading ? (
             <p className="text-center text-blue-500">Ładowanie danych...</p>
           ) : selectedDay ? (

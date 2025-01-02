@@ -45,6 +45,8 @@ const DodawanieTransakcji = () => {
           },
         };
 
+        
+
         const response = await axios.get('https://localhost:7039/api/Products', config);
         const productOptions = response.data.map(product => ({
           value: product.id,
@@ -218,15 +220,13 @@ const DodawanieTransakcji = () => {
                   placeholder="Ilość"
                   className="w-24 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
-                {/*<button
-                onClick={() => handleRemoveProduct(index)}
-                className="bg-gradient-to-r from-red-500 to-red-700 text-white py-2 px-4 rounded-lg hover:from-red-600 hover:to-red-800 transition"
-              >
-                Usuń
-              </button>*/}
                 <button
-                  onClick={handleRemoveProduct}
-                  className="relative flex items-center justify-center w-10 h-10 rounded-full text-gray-500 hover:text-red-600 hover:bg-red-100 active:bg-red-200 transition focus:outline-none"
+                  onClick={() => handleRemoveProduct(index)}
+                  className={`relative flex items-center justify-center w-10 h-10 rounded-full transition focus:outline-none ${newTransaction.transactionProducts.length > 1
+                      ? "text-gray-500 hover:text-red-600 hover:bg-red-100 active:bg-red-200"
+                      : "text-gray-300 cursor-not-allowed"
+                    }`}
+                  disabled={newTransaction.transactionProducts.length <= 1}
                 >
                   <MinusIcon className="w-5 h-5" />
                 </button>
@@ -242,14 +242,6 @@ const DodawanieTransakcji = () => {
           Dodaj produkt
         </button>
       </div>
-      {/*<input
-        type="text"
-        name="paymentType"
-        value={newTransaction.paymentType}
-        onChange={handleInputChange}
-        placeholder="Sposób płatności"
-        className="block w-full mb-4 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-      />*/}
       <div className="mt-6 flex justify-between">
         <div className="mb-4">
           <label className="block mb-2 text-gray-700 font-medium">Metoda płatności</label>
@@ -290,13 +282,15 @@ const DodawanieTransakcji = () => {
           </div>
         </div>
         <div className="">
-          <label className="block mb-2 text-gray-700 font-medium">Rabat</label>
+          <label className="block mb-2 text-gray-700 font-medium">Rabat (%)</label>
         <input
           type="number"
           name="discount"
           value={newTransaction.discount}
           onChange={handleInputChange}
           placeholder="Rabat"
+          min="0"
+          max="100"
           className="block w-full mb-4 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
         /></div>
         
