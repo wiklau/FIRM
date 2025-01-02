@@ -214,6 +214,11 @@ const Harmonogram = () => {
   
 
   return (
+    <div className='p-10 ml-11'>
+      <div className="flex items-center justify-between py-6 px-8 bg-gradient-to-r from-blue-500 to-teal-500 rounded-xl shadow-md mb-6">
+        <h1 className="text-white text-4xl font-semibold">Harmonogram</h1>
+      </div>
+      
     <div className="container mx-auto px-4 py-6">
       <div className="flex justify-between items-center mb-6">
         <div className="text-lg font-semibold">
@@ -227,7 +232,6 @@ const Harmonogram = () => {
           {isWorking ? 'Zakończ pracę' : 'Rozpocznij pracę'}
         </button>
       </div>
-
       <div className="flex gap-6">
         <div className="w-2/3">
           <div className="flex justify-between items-center mb-4">
@@ -259,7 +263,7 @@ const Harmonogram = () => {
           </div>
         </div>
 
-        <div className="w-1/3 bg-gray-100 p-4 rounded-lg">
+        <div className="w-1/3 bg-gray-100 p-4 rounded-lg h-[350px]">
           {loading ? (
             <p className="text-center text-blue-500">Ładowanie danych...</p>
           ) : selectedDay ? (
@@ -299,7 +303,7 @@ const Harmonogram = () => {
             <p className="text-center text-gray-500">Wybierz dzień, aby zobaczyć szczegóły.</p>
           )}
         </div>
-
+      </div>
       </div>
     </div>
   );
