@@ -45,6 +45,8 @@ const DodawanieTransakcji = () => {
           },
         };
 
+        
+
         const response = await axios.get('https://localhost:7039/api/Products', config);
         const productOptions = response.data.map(product => ({
           value: product.id,
@@ -280,13 +282,15 @@ const DodawanieTransakcji = () => {
           </div>
         </div>
         <div className="">
-          <label className="block mb-2 text-gray-700 font-medium">Rabat</label>
+          <label className="block mb-2 text-gray-700 font-medium">Rabat (%)</label>
         <input
           type="number"
           name="discount"
           value={newTransaction.discount}
           onChange={handleInputChange}
           placeholder="Rabat"
+          min="0"
+          max="100"
           className="block w-full mb-4 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
         /></div>
         

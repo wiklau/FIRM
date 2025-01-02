@@ -8,7 +8,12 @@ const DatePicker = ({ value, onChange, name, className, minDate, maxDate }) => {
         return;
       }
   
-      onChange(e);
+      onChange({
+        target: {
+          name: name,
+          value: newValue,
+        },
+      });
     };
 
     const getCurrentDate = () => {

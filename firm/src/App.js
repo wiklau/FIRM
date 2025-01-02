@@ -47,9 +47,9 @@ const App = () => {
           )}
           <div className="w-3/4">
             <Routes>
-            <Route path="/*" element={token ? <Navigate to="/transakcje" /> : <Navigate to="/login" />} />
-              <Route path="/" element={token ? <Navigate to="/transakcje" /> : <Navigate to="/login" />} />
-              <Route path="/login" element={token ? <Navigate to="/transakcje" /> : <Login setToken={setToken} />} />
+            <Route path="/*" element={token ? <Navigate to="/harmonogram" /> : <Navigate to="/login" />} />
+              <Route path="/" element={token ? <Navigate to="/harmonogram" /> : <Navigate to="/login" />} />
+              <Route path="/login" element={token ? <Navigate to="/harmonogram" /> : <Login setToken={setToken} />} />
               <Route path="/transakcje" element={token ? <ZarzadzanieTransakcjami /> : <Navigate to="/login" />} />
               <Route path="/transakcje/dodaj" element={token ? <DodawanieTransakcji /> : <Navigate to="/login" />} />
               <Route path="/transakcje/edytuj/:id" element={token ? <EdycjaTransakcji /> : <Navigate to="/login" />} />

@@ -30,7 +30,7 @@ const PanelAdministratora = () => {
     }
 
     try {
-      await axios.post('https://localhost:7039/api/Workday/user/absence/add', {
+      await axios.post('https://localhost:7039/api/Workday/absence/add', {
         userEmail: selectedEmail,
         absenceType: absenceType,
         startTime: startDate,
