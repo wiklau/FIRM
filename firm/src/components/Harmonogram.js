@@ -28,7 +28,7 @@ const Harmonogram = () => {
 
   const fetchWorkdays = async () => {
     try {
-      const response = await axios.get('https://localhost:7039/api/Workday/user/workdays', {
+      const response = await axios.get('https://firmtracker-server.onrender.com/api/Workday/user/workdays', {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       });
       setWorkdays(response.data);
@@ -46,7 +46,7 @@ const Harmonogram = () => {
 
     try {
       await axios.post(
-        'https://localhost:7039/api/workday/start',
+        'https://firmtracker-server.onrender.com/api/workday/start',
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -65,7 +65,7 @@ const Harmonogram = () => {
 
     try {
       await axios.post(
-        'https://localhost:7039/api/workday/stop',
+        'https://firmtracker-server.onrender.com/api/workday/stop',
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -180,7 +180,7 @@ const Harmonogram = () => {
         try {
           setLoading(true);
           const response = await axios.get(
-            `https://localhost:7039/api/Workday/user/day/info/${formattedDate}`,
+            `https://firmtracker-server.onrender.com/api/Workday/user/day/info/${formattedDate}`,
             { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } }
           );
           const workdayDetails = response.data;

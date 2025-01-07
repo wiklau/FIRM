@@ -37,7 +37,7 @@ const PanelAdministratora = () => {
 
     try {
       await axios.post(
-        "https://localhost:7039/api/user/create",
+        "https://firmtracker-server.onrender.com/api/user/create",
         {
           login: userEmail,
           email: userEmail,
@@ -60,7 +60,7 @@ const PanelAdministratora = () => {
 
   const fetchEmails = async () => {
     try {
-      const response = await axios.get('https://localhost:7039/api/user/emails', {
+      const response = await axios.get('https://firmtracker-server.onrender.com/api/user/emails', {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       });
       setEmails(response.data);
@@ -78,7 +78,7 @@ const PanelAdministratora = () => {
   
     try {
       await axios.post(
-        'https://localhost:7039/api/user/ChangeUserPassword',
+        'https://firmtracker-server.onrender.com/api/user/ChangeUserPassword',
         {
           email: changePasswordEmail,
           password: changePasswordValue,
@@ -102,7 +102,7 @@ const PanelAdministratora = () => {
     }
 
     try {
-      await axios.post('https://localhost:7039/api/Workday/absence/add', {
+      await axios.post('https://firmtracker-server.onrender.com/api/Workday/absence/add', {
         userEmail: selectedEmail,
         absenceType: absenceType,
         startTime: startDate,
@@ -124,7 +124,7 @@ const PanelAdministratora = () => {
     }
 
     try {
-      const response = await axios.get('https://localhost:7039/api/Pdf/download', {
+      const response = await axios.get('https://firmtracker-server.onrender.com/api/Pdf/download', {
         params: {
           reportType: reportType,
           startDate: startDate,
@@ -152,7 +152,7 @@ const PanelAdministratora = () => {
     }
 
     try {
-      const response = await axios.get(`https://localhost:7039/api/Workday/user/${userEmail}/workdays`, {
+      const response = await axios.get(`https://firmtracker-server.onrender.com/api/Workday/user/${userEmail}/workdays`, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       });
       setWorkdays(response.data);

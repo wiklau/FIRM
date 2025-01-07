@@ -22,7 +22,7 @@ const Wydatki = () => {
       return;
     }
     try {
-      const response = await axios.get('https://localhost:7039/api/Expenses', {
+      const response = await axios.get('https://firmtracker-server.onrender.com/api/Expenses', {
         headers: { Authorization: `Bearer ${token}` },
       });
       setExpenses(response.data);
@@ -48,7 +48,7 @@ const Wydatki = () => {
 
     const token = localStorage.getItem('token');
     try {
-      const response = await axios.post('https://localhost:7039/api/Expenses', newExpense, {
+      const response = await axios.post('https://firmtracker-server.onrender.com/api/Expenses', newExpense, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const addedExpense = response.data;
@@ -63,7 +63,7 @@ const Wydatki = () => {
   const handleDeleteExpense = async () => {
     const token = localStorage.getItem('token');
     try {
-      await axios.delete(`https://localhost:7039/api/Expenses/${deleteExpenseId}`, {
+      await axios.delete(`https://firmtracker-server.onrender.com/api/Expenses/${deleteExpenseId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 

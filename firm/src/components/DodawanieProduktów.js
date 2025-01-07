@@ -61,7 +61,7 @@ const DodawanieProduktu = () => {
         },
       };
 
-      await axios.post('https://localhost:7039/api/Products', payload, config);
+      await axios.post('https://firmtracker-server.onrender.com/api/Products', payload, config);
 
       setNewProduct({
         name: '',

@@ -94,7 +94,7 @@ const WidokHarmonogramu = ({ workdays }) => {
       } else {
         try {
           const response = await axios.get(
-            `https://localhost:7039/api/Workday/user/day/info/${formattedDate}`,
+            `https://firmtracker-server.onrender.com/api/Workday/user/day/info/${formattedDate}`,
             { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } }
           );
           const workdayDetails = response.data;

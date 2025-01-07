@@ -18,7 +18,7 @@ const Raporty = () => {
       return;
     }
     try {
-      const response = await axios.get('https://localhost:7039/api/Report', {
+      const response = await axios.get('https://firmtracker-server.onrender.com/api/Report', {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -76,7 +76,7 @@ const Raporty = () => {
     const token = localStorage.getItem('token');
     try {
       console.log('Wysyłane dane:', fromDate, toDate);
-      const response = await axios.post('https://localhost:7039/api/Report', {
+      const response = await axios.post('https://firmtracker-server.onrender.com/api/Report', {
         fromDate,
         toDate
       }, {
@@ -99,7 +99,7 @@ const Raporty = () => {
   const handleDeleteReport = async (reportId) => {
     const token = localStorage.getItem('token');
     try {
-      await axios.delete(`https://localhost:7039/api/Report/${reportId}`, {
+      await axios.delete(`https://firmtracker-server.onrender.com/api/Report/${reportId}`, {
         headers: {
           Authorization: `Bearer ${token}`
         }

@@ -7,7 +7,7 @@ const Navbar = ({ setToken }) => {
   const navigate = useNavigate();
   const [showDropdown, setShowDropdown] = useState(false);
   const [userRole, setUserRole] = useState('');
-  const dropdownRef = useRef(null); // Ref do obsługi kliknięć poza dropdownem
+  const dropdownRef = useRef(null);
 
   useEffect(() => {
     const fetchUserRole = async () => {
@@ -15,7 +15,7 @@ const Navbar = ({ setToken }) => {
       if (!token) return;
 
       try {
-        const response = await axios.get('https://localhost:7039/api/user/role', {
+        const response = await axios.get('https://firmtracker-server.onrender.com/api/user/role', {
           headers: {
             'Authorization': `Bearer ${token}`,
           },

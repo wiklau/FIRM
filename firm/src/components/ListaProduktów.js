@@ -14,7 +14,7 @@ const ListaProduktow = ({ onAdd }) => {
   const fetchProducts = async () => {
     const token = localStorage.getItem('token');
     try {
-      const response = await axios.get('https://localhost:7039/api/products', {
+      const response = await axios.get('https://firmtracker-server.onrender.com/api/products', {
         headers: { Authorization: `Bearer ${token}` },
       });
       setProducts(response.data);
@@ -45,7 +45,7 @@ const ListaProduktow = ({ onAdd }) => {
     }
 
     try {
-      await axios.delete(`https://localhost:7039/api/Products/${deleteProductId}`, {
+      await axios.delete(`https://firmtracker-server.onrender.com/api/Products/${deleteProductId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       fetchProducts();

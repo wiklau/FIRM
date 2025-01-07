@@ -47,7 +47,7 @@ const DodawanieTransakcji = () => {
 
         
 
-        const response = await axios.get('https://localhost:7039/api/Products', config);
+        const response = await axios.get('https://firmtracker-server.onrender.com/api/Products', config);
         const productOptions = response.data.map(product => ({
           value: product.id,
           label: product.name,
@@ -128,7 +128,7 @@ const DodawanieTransakcji = () => {
         },
       };
 
-      await axios.post('https://localhost:7039/api/Transaction', newTransaction, config);
+      await axios.post('https://firmtracker-server.onrender.com/api/Transaction', newTransaction, config);
 
       setNewTransaction({
         id: 0,

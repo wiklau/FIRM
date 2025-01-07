@@ -19,7 +19,7 @@ const ListaTransakcji = ({ onAdd}) => {
       return;
     }
     try {
-      const response = await axios.get('https://localhost:7039/api/Transaction', {
+      const response = await axios.get('https://firmtracker-server.onrender.com/api/Transaction', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -37,7 +37,7 @@ const ListaTransakcji = ({ onAdd}) => {
       return;
     }
     try {
-      const response = await axios.get('https://localhost:7039/api/Products', {
+      const response = await axios.get('https://firmtracker-server.onrender.com/api/Products', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -64,7 +64,7 @@ const ListaTransakcji = ({ onAdd}) => {
 
   const handleDeleteTransaction = async () => {
     try {
-      await axios.delete(`https://localhost:7039/api/transaction/${deleteTransactionId}`, {
+      await axios.delete(`https://firmtracker-server.onrender.com/api/transaction/${deleteTransactionId}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },

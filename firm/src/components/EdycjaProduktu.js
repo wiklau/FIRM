@@ -23,7 +23,7 @@ const EdycjaProduktu = () => {
           return;
         }
 
-        const response = await axios.get(`https://localhost:7039/api/Products/${id}`, {
+        const response = await axios.get(`https://firmtracker-server.onrender.com/api/Products/${id}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -114,7 +114,7 @@ const EdycjaProduktu = () => {
         },
       };
 
-      await axios.put(`https://localhost:7039/api/Products/${id}`, payload, config);
+      await axios.put(`https://firmtracker-server.onrender.com/api/Products/${id}`, payload, config);
       setErrors({});
       navigate('/produkty');
     } catch (error) {

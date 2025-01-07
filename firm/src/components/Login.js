@@ -11,7 +11,7 @@ const Login = ({ setToken }) => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('https://localhost:7039/api/user/login', { email, password });
+      const response = await axios.post('https://firmtracker-server.onrender.com/api/user/login', { email, password });
       
       const token = response.data;
       setToken(token);

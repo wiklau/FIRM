@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
-import {ReactComponent as MinusIcon} from "../icons/minus-icon.svg"
+import { ReactComponent as MinusIcon } from "../icons/minus-icon.svg";
 import Select from "react-select";
-import DatePicker from './DatePicker';
+import DatePicker from "./DatePicker";
 
 const EdycjaTransakcji = () => {
   const { id } = useParams();
@@ -18,6 +18,7 @@ const EdycjaTransakcji = () => {
     totalPrice: 0,
   });
   const [products, setProducts] = useState([]);
+  const [pendingRemovals, setPendingRemovals] = useState([]);
   const [error, setError] = useState(null);
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
@@ -38,10 +39,10 @@ const EdycjaTransakcji = () => {
 
       try {
         const [transactionRes, productsRes] = await Promise.all([
-          axios.get(`https://localhost:7039/api/transaction/${id}`, {
+          axios.get(`https://firmtracker-server.onrender.com/api/transaction/${id}`, {
             headers: { Authorization: `Bearer ${token}` },
           }),
-          axios.get("https://localhost:7039/api/Products", {
+          axios.get("https://firmtracker-server.onrender.com/api/Products", {
             headers: { Authorization: `Bearer ${token}` },
           }),
         ]);
@@ -93,8 +94,8 @@ const EdycjaTransakcji = () => {
   };
 
   const handleCancel = () => {
-    navigate('/transakcje');
-  }
+    navigate("/transakcje");
+  };
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -134,45 +135,18 @@ const EdycjaTransakcji = () => {
     setErrors((prevErrors) => ({ ...prevErrors, [`quantity_${index}`]: null }));
   };
 
-  const handleRemoveProduct = async (index) => {
-    const token = getToken();
-    if (!token) {
-      console.error("Brak tokena, nie można usunąć produktu.");
-      setError("Użytkownik musi być zalogowany.");
-      return;
-    }
-  
+  const handleRemoveProduct = (index) => {
     const productToRemove = transaction.transactionProducts[index];
-    console.log(productToRemove);
-  
-    if (!productToRemove || !productToRemove.id) {
-      console.error("Nie znaleziono ID transakcyjnego produktu. Usuwanie lokalne.");
-      setTransaction((prev) => ({
-        ...prev,
-        transactionProducts: prev.transactionProducts.filter((_, i) => i !== index),
-      }));
-      return;
-    }
-  
-    try {
-      await axios.delete(
-        `https://localhost:7039/api/Transaction/${transaction.id}/product/${productToRemove.productID}`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      console.log(`Produkt o ID transakcji ${productToRemove.id} został usunięty.`);
-  
-      setTransaction((prev) => ({
-        ...prev,
-        transactionProducts: prev.transactionProducts.filter((_, i) => i !== index),
-      }));
-    } catch (err) {
-      console.error("Błąd podczas usuwania produktu:", err.response?.data || err.message);
-      setError(err.response?.data?.message || "Nie udało się usunąć produktu. Spróbuj ponownie.");
+
+    setTransaction((prev) => ({
+      ...prev,
+      transactionProducts: prev.transactionProducts.filter((_, i) => i !== index),
+    }));
+
+    if (productToRemove.id) {
+      setPendingRemovals((prev) => [...prev, productToRemove]);
     }
   };
-  
-  
-  
 
   const handleSaveChanges = async () => {
     if (!validateForm()) return;
@@ -193,14 +167,22 @@ const EdycjaTransakcji = () => {
 
     try {
       await axios.put(
-        `https://localhost:7039/api/transaction/${transaction.id}`,
+        `https://firmtracker-server.onrender.com/api/transaction/${transaction.id}`,
         updatedTransaction,
         { headers: { Authorization: `Bearer ${token}` } }
       );
+
+      for (const product of pendingRemovals) {
+        await axios.delete(
+          `https://firmtracker-server.onrender.com/api/Transaction/${transaction.id}/product/${product.productID}`,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+      }
+
       navigate("/transakcje");
     } catch (err) {
       console.error(err);
-      setError(err.response.data);
+      setError(err.response?.data || "Wystąpił błąd podczas zapisywania zmian.");
     }
   };
 
