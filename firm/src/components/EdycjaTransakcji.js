@@ -65,7 +65,6 @@ const EdycjaTransakcji = () => {
         }));
         setProducts(productOptions);
       } catch (err) {
-        console.error(err);
         setError("Wystąpił błąd podczas ładowania danych.");
       }
     };

@@ -113,8 +113,6 @@ const DodawanieTransakcji = () => {
     }
 
     try {
-      console.log('Nowa transakcja:', newTransaction);
-
       const token = localStorage.getItem('token');
       if (!token) {
         setError('Brak tokena. Użytkownik musi być zalogowany.');
@@ -150,7 +148,6 @@ const DodawanieTransakcji = () => {
       });
       navigate('/transakcje');
     } catch (error) {
-      console.error('Błąd podczas dodawania transakcji:', error);
       if (error.response && error.response.data) {
         setError(error.response.data);
       } else {

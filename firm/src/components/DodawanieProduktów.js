@@ -73,7 +73,6 @@ const DodawanieProduktu = () => {
       setError(null);
       navigate('/produkty');
     } catch (error) {
-      console.error('Błąd podczas dodawania produktu:', error);
       setError('Wystąpił błąd podczas dodawania produktu. Spróbuj ponownie.');
     }
   };

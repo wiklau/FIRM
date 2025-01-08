@@ -38,7 +38,6 @@ const EdycjaProduktu = () => {
           availability: productData.availability || '',
         });
       } catch (error) {
-        console.error('Błąd podczas pobierania produktu:', error);
         setErrors({ general: 'Wystąpił błąd podczas pobierania danych produktu.' });
       }
     };
@@ -118,7 +117,6 @@ const EdycjaProduktu = () => {
       setErrors({});
       navigate('/produkty');
     } catch (error) {
-      console.error('Błąd podczas zapisywania zmian:', error);
 
       if (error.response && error.response.status === 400) {
         setErrors({ general: error.response.data });

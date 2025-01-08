@@ -33,7 +33,6 @@ const Harmonogram = () => {
       });
       setWorkdays(response.data);
     } catch (error) {
-      console.error('Błąd podczas pobierania dni roboczych:', error);
     }
   };
 
@@ -52,7 +51,6 @@ const Harmonogram = () => {
       );
       setIsWorking(true);
     } catch (error) {
-      console.error(error);
     }
   };
 
@@ -166,8 +164,6 @@ const Harmonogram = () => {
       );
     });
   
-    console.log("Selected Date:", formattedDate);
-    console.log("Day Status:", dayStatus);
   
     if (dayStatus) {
       if (dayStatus.absence && dayStatus.absence.trim() !== "") {
@@ -193,7 +189,6 @@ const Harmonogram = () => {
             absence: null,
           });
         } catch (error) {
-          console.error("Błąd podczas pobierania danych dnia roboczego:", error);
           setSelectedDay({
             date: formattedDate,
             dayOfWeek: formatDayOfWeek(selectedDate),
