@@ -15,13 +15,6 @@ const DatePicker = ({ value, onChange, name, className, minDate, maxDate }) => {
         },
       });
     };
-
-    const getCurrentDate = () => {
-        const now = new Date();
-        const offset = now.getTimezoneOffset() * 60000; 
-        const localISOTime = new Date(now.getTime() - offset).toISOString().slice(0, 16);
-        return localISOTime;
-      };
   
     return (
       <input

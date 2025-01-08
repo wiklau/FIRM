@@ -5,7 +5,6 @@ import DatePicker from './DatePicker';
 
 const Wydatki = () => {
   const [expenses, setExpenses] = useState([]);
-  const [fromDate, setFromDate] = useState('');
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [error, setError] = useState(null);
   const [deleteExpenseId, setDeleteExpenseId] = useState(null);

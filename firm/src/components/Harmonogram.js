@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect , useCallback } from 'react';
 import axios from 'axios';
 
 const Harmonogram = () => {
@@ -93,7 +93,7 @@ const Harmonogram = () => {
     return `${year}-${month}-${day}`;
   };
 
-  const generateDaysInMonth = () => {
+  const generateDaysInMonth = useCallback(() => {
     const firstDayOfMonth = new Date(displayDate.getFullYear(), displayDate.getMonth(), 1);
     const lastDayOfMonth = new Date(displayDate.getFullYear(), displayDate.getMonth() + 1, 0);
     const firstDayWeekday = firstDayOfMonth.getDay() === 0 ? 6 : firstDayOfMonth.getDay() - 1;
@@ -101,34 +101,34 @@ const Harmonogram = () => {
 
     const days = [];
     for (let i = 0; i < firstDayWeekday; i++) {
-      days.push(null);
+        days.push(null);
     }
 
     for (let i = 1; i <= numberOfDaysInMonth; i++) {
-      const day = new Date(displayDate.getFullYear(), displayDate.getMonth(), i);
-      const formattedDate = formatDate(day);
+        const day = new Date(displayDate.getFullYear(), displayDate.getMonth(), i);
+        const formattedDate = formatDate(day);
 
-      const dayWork = workdays.find(workday => {
-        const startDate = new Date(workday.startTime.split('T')[0]);
-        const endDate = new Date(workday.endTime.split('T')[0]);
-        return (
-          formattedDate === workday.startTime.split('T')[0] ||
-          (day >= startDate && day <= endDate)
-        );
-      });
+        const dayWork = workdays.find(workday => {
+            const startDate = new Date(workday.startTime.split('T')[0]);
+            const endDate = new Date(workday.endTime.split('T')[0]);
+            return (
+                formattedDate === workday.startTime.split('T')[0] ||
+                (day >= startDate && day <= endDate)
+            );
+        });
 
-      days.push({
-        number: i,
-        type: dayWork ? (dayWork.absence ? 'absence' : 'working') : 'default'
-      });
+        days.push({
+            number: i,
+            type: dayWork ? (dayWork.absence ? 'absence' : 'working') : 'default'
+        });
     }
 
     setDaysInMonth(days);
-  };
+  }, [displayDate, workdays]);
 
   useEffect(() => {
     generateDaysInMonth();
-  }, [displayDate, workdays]);
+  }, [generateDaysInMonth]);
 
   const changeMonth = (direction) => {
     setManualDateChange(true);
