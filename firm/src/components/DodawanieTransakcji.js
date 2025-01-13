@@ -10,7 +10,7 @@ const DodawanieTransakcji = () => {
   const [newTransaction, setNewTransaction] = useState({
     id: 2,
     date: '',
-    employeeId: '',
+    employeeId: 1,
     paymentType: '',
     discount: 0,
     description: '',
@@ -107,7 +107,7 @@ const DodawanieTransakcji = () => {
   };
 
   const handleAddTransaction = async () => {
-    if (!newTransaction.date || !newTransaction.employeeId || newTransaction.transactionProducts.some(product => !product.productName || !product.quantity)) {
+    if (!newTransaction.date ||  newTransaction.transactionProducts.some(product => !product.productName || !product.quantity)) {
       setError('Proszę uzupełnić wszystkie pola.');
       return;
     }

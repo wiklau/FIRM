@@ -68,6 +68,7 @@ const Harmonogram = () => {
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setIsWorking(false);
+      window.location.reload();
     } catch (error) {
       alert("Błąd przy zapisaniu końca pracy");
     }

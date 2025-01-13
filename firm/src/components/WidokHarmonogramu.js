@@ -99,7 +99,6 @@ const WidokHarmonogramu = ({ workdays, email }) => {
             { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } }
           );
           const workdayDetails = response.data;
-          console.log(response.data);
     
           setSelectedDay({
             date: formattedDate,
