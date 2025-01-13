@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import WidokHarmonogramu from './WidokHarmonogramu';
 import DatePicker from './DatePicker';
-import { useNavigate } from 'react-router-dom';
 
 const PanelAdministratora = () => {
   const [selectedOption, setSelectedOption] = useState('harmonogramy');
@@ -19,7 +18,6 @@ const PanelAdministratora = () => {
   const [changePasswordEmail, setChangePasswordEmail] = useState('');
   const [changePasswordValue, setChangePasswordValue] = useState('');
   const [errors, setErrors] = useState({});
-  const navigate = useNavigate();
 
   const validateInputs = () => {
     const newErrors = {};
@@ -34,7 +32,7 @@ const PanelAdministratora = () => {
     if (!userPassword) {
       newErrors.password = "Pole hasło jest wymagane.";
     } else if (userPassword.length < 8) {
-      newErrors.password = "Hasło jest za krótkie.";
+      newErrors.password = "Hasło musi składać się z minimum 8 znkaków.";
     } else if (/\s/.test(userPassword)) {
       newErrors.password = "Hasło nie może zawierać spacji ani tabulatorów.";
     }
@@ -51,7 +49,7 @@ const PanelAdministratora = () => {
     if (!changePasswordValue) {
       newErrors.changePasswordValue = "Pole hasło jest wymagane.";
     } else if (changePasswordValue.length < 8) {
-      newErrors.changePasswordValue = "Hasło jest za krótkie.";
+      newErrors.changePasswordValue = "Hasło musi składać się z minimum 8 znkaków.";
     } else if (/\s/.test(changePasswordValue)) {
       newErrors.changePasswordValue = "Hasło nie może zawierać spacji ani tabulatorów.";
     }
@@ -83,6 +81,8 @@ const PanelAdministratora = () => {
       setUserEmail("");
       setUserPassword("");
       setUserRole("");
+      alert('Pomyślnie dodano użutkownika');
+      window.location.reload();
     } catch (error) {
       alert("Błąd podczas tworzenia konta");
     }
@@ -123,6 +123,8 @@ const PanelAdministratora = () => {
   
       setChangePasswordEmail('');
       setChangePasswordValue('');
+      alert('Pomyślnie zmieniono hasło');
+      window.location.reload();
     } catch (error) {
       alert('Błąd podczas zmiany hasła');
     }
@@ -144,7 +146,7 @@ const PanelAdministratora = () => {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       });
       alert('Pomyślnie dodano absencje');
-      navigate('/harmonogram');
+      window.location.reload();
 
     } catch (error) {
       alert('Błąd podczas dodawania absencji');

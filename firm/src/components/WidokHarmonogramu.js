@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 
-const WidokHarmonogramu = ({ workdays }) => {
+const WidokHarmonogramu = ({ workdays, email }) => {
   const [displayDate, setDisplayDate] = useState(new Date());
   const [daysInMonth, setDaysInMonth] = useState([]);
   const [manualDateChange, setManualDateChange] = useState(false);
@@ -95,10 +95,11 @@ const WidokHarmonogramu = ({ workdays }) => {
       } else {
         try {
           const response = await axios.get(
-            `https://firmtracker-server.onrender.com/api/Workday/user/day/info/${formattedDate}`,
+            `https://firmtracker-server.onrender.com/api/Workday/user/${email}/day/info/${formattedDate}`,
             { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } }
           );
           const workdayDetails = response.data;
+          console.log(response.data);
     
           setSelectedDay({
             date: formattedDate,
