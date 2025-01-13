@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import WidokHarmonogramu from './WidokHarmonogramu';
 import DatePicker from './DatePicker';
+import { useNavigate } from 'react-router-dom';
 
 const PanelAdministratora = () => {
   const [selectedOption, setSelectedOption] = useState('harmonogramy');
@@ -18,12 +19,42 @@ const PanelAdministratora = () => {
   const [changePasswordEmail, setChangePasswordEmail] = useState('');
   const [changePasswordValue, setChangePasswordValue] = useState('');
   const [errors, setErrors] = useState({});
+  const navigate = useNavigate();
 
   const validateInputs = () => {
     const newErrors = {};
-    if (!userEmail) newErrors.email = "Pole email jest wymagane.";
-    if (!userPassword) newErrors.password = "Pole hasło jest wymagane.";
-    if (!userRole) newErrors.role = "Wybór roli jest wymagany.";
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  
+    if (!userEmail) {
+      newErrors.email = "Pole email jest wymagane.";
+    } else if (!emailRegex.test(userEmail)) {
+      newErrors.email = "Podaj poprawny adres e-mail.";
+    }
+  
+    if (!userPassword) {
+      newErrors.password = "Pole hasło jest wymagane.";
+    } else if (userPassword.length < 8) {
+      newErrors.password = "Hasło jest za krótkie.";
+    } else if (/\s/.test(userPassword)) {
+      newErrors.password = "Hasło nie może zawierać spacji ani tabulatorów.";
+    }
+  
+    if (!userRole) {
+      newErrors.role = "Wybór roli jest wymagany.";
+    }
+  
+    return newErrors;
+  };
+  const validateInputsPassChange = () => {
+    const newErrors = {};
+
+    if (!changePasswordValue) {
+      newErrors.changePasswordValue = "Pole hasło jest wymagane.";
+    } else if (changePasswordValue.length < 8) {
+      newErrors.changePasswordValue = "Hasło jest za krótkie.";
+    } else if (/\s/.test(changePasswordValue)) {
+      newErrors.changePasswordValue = "Hasło nie może zawierać spacji ani tabulatorów.";
+    }
     return newErrors;
   };
 
@@ -53,7 +84,7 @@ const PanelAdministratora = () => {
       setUserPassword("");
       setUserRole("");
     } catch (error) {
-      console.error("Błąd podczas tworzenia konta:", error);
+      alert("Błąd podczas tworzenia konta");
     }
   };
 
@@ -65,16 +96,18 @@ const PanelAdministratora = () => {
       });
       setEmails(response.data);
     } catch (error) {
-      console.error('Błąd podczas pobierania emaili:', error);
+      alert('Błąd podczas pobierania emaili');
     }
   };
 
 
   const changePassword = async () => {
-    if (!changePasswordEmail || !changePasswordValue) {
-      alert("Wszystkie pola muszą być wypełnione!");
+    const validationErrors = validateInputsPassChange();
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
       return;
     }
+    setErrors({});
   
     try {
       await axios.post(
@@ -91,7 +124,7 @@ const PanelAdministratora = () => {
       setChangePasswordEmail('');
       setChangePasswordValue('');
     } catch (error) {
-      console.error('Błąd podczas zmiany hasła:', error);
+      alert('Błąd podczas zmiany hasła');
     }
   };
 
@@ -110,10 +143,11 @@ const PanelAdministratora = () => {
       }, {
         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       });
+      alert('Pomyślnie dodano absencje');
+      navigate('/harmonogram');
 
-      console.log("Absencja wysłana");
     } catch (error) {
-      console.error('Błąd podczas dodawania absencji:', error);
+      alert('Błąd podczas dodawania absencji');
     }
   };
 
@@ -141,7 +175,7 @@ const PanelAdministratora = () => {
       link.download = `raport_${reportType}_${startDate}_${endDate}.pdf`;
       link.click();
     } catch (error) {
-      console.error('Błąd podczas pobierania raportu:', error);
+      alert('Błąd podczas pobierania raportu');
     }
   };
 
@@ -157,7 +191,7 @@ const PanelAdministratora = () => {
       });
       setWorkdays(response.data);
     } catch (error) {
-      console.error('Błąd podczas pobierania harmonogramu:', error);
+      alert('Błąd podczas pobierania harmonogramu');
     }
   };
 
@@ -348,8 +382,8 @@ const PanelAdministratora = () => {
                   className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
                   <option value="">Wybierz...</option>
-                  <option value="sick">Chorobowe</option>
-                  <option value="vacation">Urlop</option>
+                  <option value="Chorobowe">Chorobowe</option>
+                  <option value="Urlop">Urlop</option>
                 </select>
               </div>
 
@@ -499,8 +533,11 @@ const PanelAdministratora = () => {
                   id="changePasswordValue"
                   value={changePasswordValue}
                   onChange={(e) => setChangePasswordValue(e.target.value)}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className={`w-full p-3 border ${
+                    errors.changePasswordValue ? "border-red-500" : "border-gray-300"
+                  } rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500`}
                 />
+                {errors.changePasswordValue && <p className="text-red-500 text-sm">{errors.changePasswordValue}</p>}
               </div>
 
               <button

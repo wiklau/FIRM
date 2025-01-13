@@ -14,7 +14,7 @@ const Raporty = () => {
   const fetchReports = async () => {
     const token = localStorage.getItem('token');
     if (!token) {
-      console.error('Brak tokena. Użytkownik musi być zalogowany.');
+      alert('Brak tokena. Użytkownik musi być zalogowany.');
       return;
     }
     try {
@@ -25,7 +25,7 @@ const Raporty = () => {
       });
       setReports(response.data);
     } catch (error) {
-      console.error('Błąd podczas pobierania raportów:', error);
+      alert('Błąd podczas pobierania raportów');
     }
   };
 
@@ -75,7 +75,6 @@ const Raporty = () => {
     }
     const token = localStorage.getItem('token');
     try {
-      console.log('Wysyłane dane:', fromDate, toDate);
       const response = await axios.post('https://firmtracker-server.onrender.com/api/Report', {
         fromDate,
         toDate
@@ -87,7 +86,6 @@ const Raporty = () => {
       const newReport = response.data;
       setReports([...reports, newReport]);
     } catch (error) {
-      console.error('Błąd podczas generowania raportu:', error);
       if (error.response && error.response.data) {
         setError(error.response.data);
       } else {
@@ -107,7 +105,6 @@ const Raporty = () => {
       fetchReports();
       closeDeleteConfirmation();
     } catch (error) {
-      console.error('Błąd podczas usuwania raportu:', error);
       if (error.response && error.response.data) {
         setError(error.response.data);
       } else {

@@ -10,7 +10,7 @@ const EdycjaTransakcji = () => {
   const [transaction, setTransaction] = useState({
     id: 2,
     date: "",
-    employeeId: "",
+    employeeId: 1,
     transactionProducts: [],
     paymentType: "",
     discount: "",
@@ -75,7 +75,6 @@ const EdycjaTransakcji = () => {
   const validateForm = () => {
     const validationErrors = {};
     if (!transaction.date) validationErrors.date = "Data transakcji jest wymagana.";
-    if (!transaction.employeeId || transaction.employeeId <= 0) validationErrors.employeeId = "Numer pracownika jest błędny.";
     if (transaction.transactionProducts.length === 0)
       validationErrors.transactionProducts = "Transakcja musi zawierać co najmniej jeden produkt.";
     else {
@@ -180,7 +179,6 @@ const EdycjaTransakcji = () => {
 
       navigate("/transakcje");
     } catch (err) {
-      console.error(err);
       setError(err.response?.data || "Wystąpił błąd podczas zapisywania zmian.");
     }
   };
@@ -205,19 +203,6 @@ const EdycjaTransakcji = () => {
           {errors.date && <span className="text-red-500 text-sm">{errors.date}</span>}
         </div>
       </div>
-      <div className="pb-4 items-center">
-          <label className="block mb-2 text-gray-700 font-medium">Nr pracownika</label>
-          <input
-            type="number"
-            name="employeeId"
-            value={transaction.employeeId}
-            onChange={handleInputChange}
-            placeholder="Nr pracownika"
-            className="flex mb-4 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-          {errors.employeeId && <span className="text-red-500 text-sm">{errors.employeeId}</span>}
-        </div>
-  
       <label className="block mb-2 text-gray-700 font-medium">Produkty transkacji</label>
       <div className="border border-gray-300 rounded-lg shadow-sm p-4 h-80 overflow-y-scroll">
         {transaction.transactionProducts.map((product, index) => (

@@ -26,7 +26,7 @@ const Navbar = ({ setToken }) => {
           console.error('Nie udało się pobrać roli użytkownika');
         }
       } catch (error) {
-        console.error('Błąd podczas pobierania roli użytkownika:', error);
+        alert('Błąd podczas pobierania roli użytkownika');
       }
     };
 

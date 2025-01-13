@@ -16,17 +16,13 @@ const Wydatki = () => {
 
   const fetchExpenses = async () => {
     const token = localStorage.getItem('token');
-    if (!token) {
-      console.error('Brak tokena. Użytkownik musi być zalogowany.');
-      return;
-    }
     try {
       const response = await axios.get('https://firmtracker-server.onrender.com/api/Expenses', {
         headers: { Authorization: `Bearer ${token}` },
       });
       setExpenses(response.data);
     } catch (error) {
-      console.error('Błąd podczas pobierania wydatków:', error);
+      alert('Błąd podczas pobierania wydatków');
     }
   };
 
@@ -54,7 +50,6 @@ const Wydatki = () => {
       setExpenses([...expenses, addedExpense]);
       setNewExpense({ date: '', value: '', description: '' });
     } catch (error) {
-      console.error('Błąd podczas dodawania wydatku:', error);
       setError('Wystąpił błąd podczas dodawania wydatku.');
     }
   };
@@ -70,7 +65,6 @@ const Wydatki = () => {
       setDeleteExpenseId(null);
       setShowDeleteModal(false);
     } catch (error) {
-      console.error('Błąd podczas usuwania wydatku:', error);
       if (error.response && error.response.data) {
         setError(error.response.data);
       } else {

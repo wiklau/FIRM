@@ -84,8 +84,6 @@ const WidokHarmonogramu = ({ workdays }) => {
       );
     });
   
-    console.log("Selected Date:", formattedDate);
-    console.log("Day Status:", dayStatus);
   
     if (dayStatus) {
       if (dayStatus.absence && dayStatus.absence.trim() !== "") {
@@ -110,7 +108,6 @@ const WidokHarmonogramu = ({ workdays }) => {
             absence: null,
           });
         } catch (error) {
-          console.error("Błąd podczas pobierania danych dnia roboczego:", error);
           setSelectedDay({
             date: formattedDate,
             dayOfWeek: formatDayOfWeek(selectedDate),

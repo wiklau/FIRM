@@ -19,7 +19,7 @@ const ListaProduktow = ({ onAdd }) => {
       });
       setProducts(response.data);
     } catch (error) {
-      console.error('Błąd podczas pobierania produktów:', error);
+      alert('Błąd podczas pobierania produktów:');
     }
   };
 
@@ -39,11 +39,6 @@ const ListaProduktow = ({ onAdd }) => {
       return;
     }
 
-    if (!deleteProductId) {
-      console.error('Brak ID produktu do usunięcia!');
-      return;
-    }
-
     try {
       await axios.delete(`https://firmtracker-server.onrender.com/api/Products/${deleteProductId}`, {
         headers: { Authorization: `Bearer ${token}` },
@@ -54,7 +49,6 @@ const ListaProduktow = ({ onAdd }) => {
     } catch (error) {
       setShowModal(false);
       setDeleteError(error.response?.data || 'Nieznany błąd');
-      console.error('Błąd podczas usuwania produktu:', error);
     }
   };
 

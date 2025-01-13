@@ -131,7 +131,7 @@ const DodawanieTransakcji = () => {
       setNewTransaction({
         id: 0,
         date: '',
-        employeeId: '',
+        employeeId: 1,
         transactionProducts: [
           {
             id: 0,
@@ -171,21 +171,7 @@ const DodawanieTransakcji = () => {
           className="flex-1 mb-4 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           maxDate="2099-12-31T23:59"
         />
-        </div>
-      
-        <div>
-        <label className="block mb-2 text-gray-700 font-medium">Nr pracownika</label>
-          <input
-          type="number"
-          name="employeeId"
-          value={newTransaction.employeeId}
-          onChange={handleInputChange}
-          placeholder="Nr pracownika"
-          className="flex mb-4 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-        </div>
-
-        
+        </div> 
       </div>
 
       <label className="block mb-2 text-gray-700 font-medium">Produkty transakcji</label>

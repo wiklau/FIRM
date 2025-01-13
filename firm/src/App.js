@@ -24,10 +24,8 @@ const App = () => {
     if (token) {
       try {
         const decodedToken = jwtDecode(token);
-        console.log(decodedToken);
         setUserRole(decodedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role']);
       } catch (error) {
-        console.error('Failed to decode token:', error);
         setUserRole(null);
       }
     } else {

@@ -15,7 +15,7 @@ const ListaTransakcji = ({ onAdd}) => {
   const fetchTransactions = async () => {
     const token = localStorage.getItem('token');
     if (!token) {
-      console.error('Brak tokena. Użytkownik musi być zalogowany.');
+      alert('Brak tokena. Użytkownik musi być zalogowany.');
       return;
     }
     try {
@@ -26,14 +26,14 @@ const ListaTransakcji = ({ onAdd}) => {
       });
       setTransactions(response.data);
     } catch (error) {
-      console.error('Błąd podczas pobierania transakcji:', error);
+      alert('Błąd podczas pobierania transakcji');
     }
   };
 
   const fetchProducts = async () => {
     const token = localStorage.getItem('token');
     if (!token) {
-      console.error('Brak tokena. Użytkownik musi być zalogowany.');
+      alert('Brak tokena. Użytkownik musi być zalogowany.');
       return;
     }
     try {
@@ -44,7 +44,7 @@ const ListaTransakcji = ({ onAdd}) => {
       });
       response.data.map(product => ({ value: product.id, label: product.name }));
     } catch (error) {
-      console.error('Błąd podczas pobierania produktów:', error);
+      alert('Błąd podczas pobierania produktów');
     }
   };
 
@@ -74,8 +74,7 @@ const ListaTransakcji = ({ onAdd}) => {
       setDeleteTransactionId(null);
     } catch (error) {
       setShowModal(false);
-      setDeleteError(error.response?.data || 'Nieznany błąd');
-      console.error('Błąd podczas usuwania produktu:', error);}
+      setDeleteError(error.response?.data || 'Nieznany błąd');}
   };
 
   const openDeleteConfirmation = (transactionId) => {
